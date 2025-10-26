@@ -6,7 +6,7 @@ export default function CircularProgressBar() {
     <AnimatedCircularProgress
       size={70}
       width={6}
-      fill={65}
+      fill={70}
       tintColor="#3b82f6"
       backgroundColor="#d1d5db"
       rotation={225}

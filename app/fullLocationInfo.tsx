@@ -1,4 +1,5 @@
 import CircularProgressBar from "@/component/CircularProgressBar";
+import RGBCircularProgressBar from "@/component/RGBCIrcularProgressBar";
 import { ScrollView, Text, View } from "react-native";
 
 export default function fullLocationInfo(){
@@ -10,10 +11,13 @@ export default function fullLocationInfo(){
                 <Text className="text-xl">Clear 28°/21°</Text>
             </View>
             <View className="flex-row flex-wrap justify-between px-6 pt-10 pb-10">
-                <View className="w-[49%] h-38 bg-blue-100 rounded-2xl mb-5 pt-5 pl-5">
+                <View className="w-[49%] h-38 bg-blue-100 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
                     <View className="pb-20">
                         <Text>UV</Text>
                         <Text className="text-2xl font-medium">Weak</Text>
+                    </View>
+                    <View className="pt-10">
+                        <RGBCircularProgressBar />
                     </View>
                 </View>
                 <View className="w-[49%] h-38 bg-blue-100 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
@@ -25,25 +29,31 @@ export default function fullLocationInfo(){
                         <CircularProgressBar />
                     </View>
                 </View>
-                <View className="w-[49%] h-38 bg-blue-100 rounded-2xl mb-5 pt-5 pl-5">
+                <View className="w-[49%] h-38 bg-blue-100 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
                     <View className="pb-20">
                         <Text>Dew point</Text>
                         <Text className="text-2xl font-medium">26.5%</Text>
                     </View>
                 </View>
-                <View className="w-[49%] h-38 bg-blue-100 rounded-2xl mb-5 pt-5 pl-5">
+                <View className="w-[49%] h-38 bg-blue-100 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
                     <View className="pb-20">
                         <Text>Northeast</Text>
                         <Text className="text-2xl font-medium">Force 2</Text>
                     </View>
                 </View>
-                <View className="w-[49%] h-32 bg-blue-100 rounded-2xl mb-5 pt-5 pl-5">
-                    <Text>Sunrise</Text>
-                    <Text className="text-2xl font-medium">05:56</Text>
+                <View className="w-[49%] h-38 bg-blue-100 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
+                    <View className="pb-20">
+                        <Text>Sunrise</Text>
+                        <Text className="text-2xl font-medium">05:56</Text>
+                    </View>
                 </View>
-                <View className="w-[49%] h-32 bg-blue-100 rounded-2xl mb-5 pt-5 pl-5">
-                    <Text>Pressure</Text>
-                    <Text className="text-2xl font-medium">1016</Text>
+                <View className="w-[49%] h-38 bg-blue-100 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
+                    <View className="pb-20">
+                        <Text>Pressure</Text>
+                        <Text className="text-2xl font-medium">1016</Text>
+                    </View>
+                    <View className="pt-10">
+                    </View>
                 </View>
             </View>
         </ScrollView>
