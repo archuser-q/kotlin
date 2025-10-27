@@ -22,19 +22,21 @@ export default function AddedLocation() {
   return (
     <ScrollView className="bg-white flex-1">
       <View className="pt-12">
-        <View className="flex-row items-center bg-gray-100 rounded-3xl mx-4 px-4">
-            <Ionicons name="search-outline" size={20} color="#9ca3af" />
-            <TextInput
-              value={query}
-              onChangeText={handleSearch}
-              placeholder="Enter location ..."
-              placeholderTextColor="#9ca3af"
-              className="flex-1 ml-2 text-gray-800 text-base"
-            />
-            <TouchableOpacity onPress={() => handleSearch("")}>
-              <Text className="text-blue-500">Cancel</Text>
-            </TouchableOpacity>
-        </View>
+          <View className="flex-row items-center justify-between mx-4">
+              <View className="flex-row items-center bg-gray-100 rounded-3xl px-4 flex-1 mr-3">
+                <Ionicons name="search-outline" size={20} color="#9ca3af" />
+                <TextInput
+                    value={query}
+                    onChangeText={handleSearch}
+                    placeholder="Enter location ..."
+                    placeholderTextColor="#9ca3af"
+                    className="flex-1 ml-2 text-gray-800 text-base"
+                />
+              </View>
+              <TouchableOpacity onPress={() => handleSearch("")}>
+                <Text className="text-blue-500 text-base">Cancel</Text>
+              </TouchableOpacity>
+          </View>
       </View>
 
       {filteredCities.length > 0 ? (

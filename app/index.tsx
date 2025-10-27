@@ -1,8 +1,10 @@
 import Ionicons from "@expo/vector-icons/build/Ionicons";
+import { useRouter } from "expo-router";
 import React from "react";
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export default function Index() {
+  const router = useRouter();
   return (
     <ScrollView className="bg-white">
       <View className="pt-12 pl-5 pb-10">
@@ -19,6 +21,7 @@ export default function Index() {
           placeholder="Enter location ..."
           placeholderTextColor="#9ca3af"
           className="flex-1 ml-2 text-gray-800 text-base"
+          onPressIn={() => router.push("/addedLocation")}
         />
       </View>
       <View 
