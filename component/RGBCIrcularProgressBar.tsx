@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text } from 'react-native';
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 
@@ -11,11 +11,15 @@ export default function RGBCircularProgressBar() {
     if (fill < 80) return "#ef4444";   
     return "#8b5cf6";                  
   };
+  const filled = 10;
+  useEffect(() => {
+    setColor(getColorFromFill(filled));
+  }, [filled]);
   return (
     <AnimatedCircularProgress
       size={70}
       width={6}
-      fill={50}
+      fill={filled}
       tintColor={color}
       backgroundColor="#d1d5db"
       rotation={225}
@@ -24,7 +28,6 @@ export default function RGBCircularProgressBar() {
     >
       {(fill: number) => {
         const newColor = getColorFromFill(fill);
-        if (newColor !== color) setColor(newColor); 
         return (
           <Text
             className="text-2xl font-extrabold"
