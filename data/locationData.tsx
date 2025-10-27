@@ -1,0 +1,63 @@
+import { Float } from "react-native/Libraries/Types/CodegenTypes";
+
+export type DataType = {
+    name: string;
+    region: string;
+    longitude: Float;
+    latitude: Float;
+}
+
+export const cities: DataType[] = [
+    {name: "Hanoi", region:"Asia", longitude: 105.804817, latitude: 21.028511},
+    {name: "Ho Chi Minh", region: "Asia", longitude: 106.660172, latitude: 10.762622},
+    {name: "Da Nang", region: "Asia", longitude: 108.206230, latitude: 16.047079},
+    { name: "Tokyo", region: "Asia", longitude: 139.6917, latitude: 35.6895 },
+    { name: "Delhi", region: "Asia", longitude: 77.1025, latitude: 28.7041 },
+    { name: "Shanghai", region: "Asia", longitude: 121.4737, latitude: 31.2304 },
+    { name: "São Paulo", region: "South America", longitude: -46.6333, latitude: -23.5505 },
+    { name: "Mexico City", region: "North America", longitude: -99.1332, latitude: 19.4326 },
+    { name: "Cairo", region: "Africa", longitude: 31.2357, latitude: 30.0444 },
+    { name: "Mumbai", region: "Asia", longitude: 72.8777, latitude: 19.0760 },
+    { name: "Beijing", region: "Asia", longitude: 116.4074, latitude: 39.9042 },
+    { name: "Dhaka", region: "Asia", longitude: 90.4125, latitude: 23.8103 },
+    { name: "Osaka", region: "Asia", longitude: 135.5023, latitude: 34.6937 },
+    { name: "New York", region: "North America", longitude: -74.0060, latitude: 40.7128 },
+    { name: "Karachi", region: "Asia", longitude: 67.0099, latitude: 24.8607 },
+    { name: "Buenos Aires", region: "South America", longitude: -58.3816, latitude: -34.6037 },
+    { name: "Istanbul", region: "Europe", longitude: 28.9784, latitude: 41.0082 },
+    { name: "Kolkata", region: "Asia", longitude: 88.3639, latitude: 22.5726 },
+    { name: "Manila", region: "Asia", longitude: 120.9842, latitude: 14.5995 },
+    { name: "Lagos", region: "Africa", longitude: 3.3792, latitude: 6.5244 },
+    { name: "Rio de Janeiro", region: "South America", longitude: -43.1729, latitude: -22.9068 },
+    { name: "Tianjin", region: "Asia", longitude: 117.3616, latitude: 39.3434 },
+    { name: "Kinshasa", region: "Africa", longitude: 15.2663, latitude: -4.4419 },
+    { name: "Guangzhou", region: "Asia", longitude: 113.2644, latitude: 23.1291 },
+    { name: "Los Angeles", region: "North America", longitude: -118.2437, latitude: 34.0522 },
+    { name: "Moscow", region: "Europe", longitude: 37.6173, latitude: 55.7558 },
+    { name: "Shenzhen", region: "Asia", longitude: 114.0579, latitude: 22.5431 },
+    { name: "Lahore", region: "Asia", longitude: 74.3436, latitude: 31.5497 },
+    { name: "Bangalore", region: "Asia", longitude: 77.5946, latitude: 12.9716 },
+    { name: "Paris", region: "Europe", longitude: 2.3522, latitude: 48.8566 },
+    { name: "Bogotá", region: "South America", longitude: -74.0721, latitude: 4.7110 },
+    { name: "Jakarta", region: "Asia", longitude: 106.8456, latitude: -6.2088 },
+    { name: "Chennai", region: "Asia", longitude: 80.2707, latitude: 13.0827 },
+    { name: "Lima", region: "South America", longitude: -77.0428, latitude: -12.0464 },
+    { name: "Bangkok", region: "Asia", longitude: 100.5018, latitude: 13.7563 },
+    { name: "Seoul", region: "Asia", longitude: 126.9780, latitude: 37.5665 },
+    { name: "Nagoya", region: "Asia", longitude: 136.9066, latitude: 35.1815 },
+    { name: "Hyderabad", region: "Asia", longitude: 78.4867, latitude: 17.3850 },
+    { name: "London", region: "Europe", longitude: -0.1278, latitude: 51.5074 },
+    { name: "Tehran", region: "Asia", longitude: 51.3890, latitude: 35.6892 },
+    { name: "Chicago", region: "North America", longitude: -87.6298, latitude: 41.8781 },
+    { name: "Chengdu", region: "Asia", longitude: 104.0668, latitude: 30.5728 },
+    { name: "Nanjing", region: "Asia", longitude: 118.7969, latitude: 32.0603 },
+    { name: "Wuhan", region: "Asia", longitude: 114.3055, latitude: 30.5928 },
+    { name: "Luanda", region: "Africa", longitude: 13.2344, latitude: -8.8383 },
+    { name: "Ahmedabad", region: "Asia", longitude: 72.5714, latitude: 23.0225 },
+    { name: "Kuala Lumpur", region: "Asia", longitude: 101.6869, latitude: 3.1390 },
+    { name: "Xi'an", region: "Asia", longitude: 108.9398, latitude: 34.3416 },
+    { name: "Hong Kong", region: "Asia", longitude: 114.1694, latitude: 22.3193 },
+    { name: "Dongguan", region: "Asia", longitude: 113.7518, latitude: 23.0206 },
+    { name: "Hangzhou", region: "Asia", longitude: 120.1551, latitude: 30.2741 },
+    { name: "Foshan", region: "Asia", longitude: 113.1220, latitude: 23.0218 },
+];
