@@ -38,6 +38,15 @@ export default function RootLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="testLayout"
+        options={{
+          title: "LineChart",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home-outline" size={size} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

@@ -1,5 +1,6 @@
 import CircularProgressBar from "@/component/CircularProgressBar";
 import RGBCircularProgressBar from "@/component/RGBCIrcularProgressBar";
+import { Wave } from "@/component/wave";
 import { ScrollView, Text, View } from "react-native";
 
 export default function fullLocationInfo(){
@@ -29,10 +30,13 @@ export default function fullLocationInfo(){
                         <CircularProgressBar />
                     </View>
                 </View>
-                <View className="w-[49%] h-38 bg-blue-100 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
-                    <View className="pb-20">
-                        <Text>Dew point</Text>
-                        <Text className="text-2xl font-medium">26.5%</Text>
+                <View className="w-[49%] h-38 bg-blue-100 rounded-2xl mb-5 pt-5 pl-5 flex-row items-center pr-5">
+                    <View className="pb-20 flex-1">
+                        <Text>Rainfall</Text>
+                        <Text className="text-2xl font-medium">50 mm</Text>
+                    </View>
+                    <View className="pt-10">
+                        <Wave size={67} value={60}/>
                     </View>
                 </View>
                 <View className="w-[49%] h-38 bg-blue-100 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
