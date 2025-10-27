@@ -1,11 +1,13 @@
 import { cities, DataType } from "@/data/locationData";
 import Ionicons from "@expo/vector-icons/build/Ionicons";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export default function AddedLocation() {
   const [query, setQuery] = useState("");
   const [filteredCities, setFilteredCities] = useState<DataType[]>([]);
+  const router = useRouter();
 
   const handleSearch = (text: string) => {
     setQuery(text);
@@ -33,7 +35,7 @@ export default function AddedLocation() {
                     className="flex-1 ml-2 text-gray-800 text-base"
                 />
               </View>
-              <TouchableOpacity onPress={() => handleSearch("")}>
+              <TouchableOpacity onPressIn={() => router.push("/")}>
                 <Text className="text-blue-500 text-base">Cancel</Text>
               </TouchableOpacity>
           </View>
