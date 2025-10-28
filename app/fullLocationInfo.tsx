@@ -2,6 +2,7 @@ import CircularProgressBar from "@/component/CircularProgressBar";
 import DashCircularProgressBar from "@/component/DashCircularProgressBar";
 import RGBCircularProgressBar from "@/component/RGBCIrcularProgressBar";
 import { Wave } from "@/component/wave";
+import getUVLevel from "@/utils/getUVLevel";
 import getWeatherGif from "@/utils/getWeatherGif";
 import getWindDirection from "@/utils/getWindDirection";
 import { useLocalSearchParams } from "expo-router";
@@ -9,15 +10,9 @@ import { Droplet, Sun, Thermometer } from 'lucide-react-native';
 import { ImageBackground, ScrollView, Text, View } from "react-native";
 
 export default function fullLocationInfo(){
-    function getUVLevel(uv: number): string {
-        if (uv < 20) return 'Low';
-        if (uv < 40) return 'Mod';
-        if (uv < 60) return 'High';
-        if (uv < 80) return 'V.High';
-        return 'Danger';
-    }
-    const { cityName, weatherData } = useLocalSearchParams();
+    const { cityName, weatherData, airQualityData } = useLocalSearchParams();
     const weather = JSON.parse(weatherData as string); 
+    const airQuality = JSON.parse(airQualityData as string);
     const windDirectionPercent = (weather.current.wind_direction_10m / 360) * 100;
     const data = [
         { time: "06:00", temp: "22" },
@@ -127,13 +122,38 @@ export default function fullLocationInfo(){
                             </CircularProgressBar>
                         </View>
                     </View>
+                    <View className="w-[100%] h-38 bg-white/20 rounded-2xl mb-5 py-5 pl-5 pr-5">
+                        <Text className="text-white text-lg font-semibold mb-3">Vision</Text>
+
+                        <View className="flex-row justify-between items-center">
+                            <View className="flex-1 gap-3">
+                                <Text className="text-white font-normal">Sunset:</Text>
+                                <Text className="text-white font-normal">Sunrise:</Text>
+                                <Text className="text-white font-normal">Vision:</Text>
+                            </View>
+                            <View className="flex-1 gap-3">
+                                <Text className="text-white font-normal">
+                                    {new Date(weather.daily.sunset[0]).toLocaleString('vi-VN', {
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        hour12: false
+                                    })}
+                                </Text>
+                                <Text className="text-white font-normal">
+                                    {new Date(weather.daily.sunrise[0]).toLocaleString('vi-VN', {
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        hour12: false
+                                    })}
+                                </Text>
+                                <Text className="text-white font-normal">{weather.current.visibility/1000} km</Text>
+                            </View>
+                        </View>
+                    </View>
                     <View className="w-[49%] h-38 bg-white/20 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
                         <View className="pb-20">
-                            <Text className="text-white">Sunrise</Text>
-                            <Text className="text-2xl font-medium text-white">{new Date(weather.daily.sunrise[0]).toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'})}</Text>
-                        </View>
-                        <View className="pt-10">
-                            <Sun size={65} color="#3b82f6" fill="#3b82f6" />
+                            <Text className="text-white">Air quality</Text>
+                            <Text className="text-2xl font-medium text-white">{airQuality.hourly.european_aqi[0]}</Text>
                         </View>
                     </View>
                     <View className="w-[49%] h-38 bg-white/20 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
@@ -148,6 +168,16 @@ export default function fullLocationInfo(){
                                         hPa
                                     </Text>
                                 )}
+                            </CircularProgressBar>
+                        </View>
+                    </View>
+                    <View className="w-[49%] h-38 bg-white/20 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
+                        <View className="pb-20">
+                            <Text className="text-white">Cloud</Text>
+                            <Text className="text-2xl font-medium text-white">{Math.round(weather.current.cloud_cover)}</Text>
+                        </View>
+                        <View className="pt-10">
+                            <CircularProgressBar fill={Math.round(weather.current.cloud_cover)} tintColor="#3b82f6">
                             </CircularProgressBar>
                         </View>
                     </View>

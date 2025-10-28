@@ -1,5 +1,5 @@
 import { cities, DataType } from "@/data/locationData";
-import { getWeather } from "@/utils/axios";
+import { getAirQuality, getWeather } from "@/utils/axios";
 import Ionicons from "@expo/vector-icons/build/Ionicons";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
@@ -140,6 +140,7 @@ export default function AddedLocation() {
                 const { latitude, longitude } = location.coords;
 
                 const weatherData = await getWeather(latitude, longitude);
+                const airQualityData = await getAirQuality(latitude, longitude);
 
                 router.push({
                   pathname: "/fullLocationInfo",
@@ -149,6 +150,7 @@ export default function AddedLocation() {
                     latitude: String(latitude),
                     longitude: String(longitude),
                     weatherData: JSON.stringify(weatherData),
+                    airQualityData: JSON.stringify(airQualityData)
                   },
                 });
               }}
@@ -189,12 +191,14 @@ export default function AddedLocation() {
                       className="bg-gray-100 py-3 px-5 rounded-xl"
                       onPress={async () => {
                       const weatherData = await getWeather(city.latitude, city.longitude);
+                      const airQualityData = await getAirQuality(city.latitude, city.longitude);
                       if (weatherData) {
                         router.push({
                           pathname: '/fullLocationInfo',
                           params: {
                             cityName: city.name,
                             weatherData: JSON.stringify(weatherData),
+                            airQualityData: JSON.stringify(airQualityData)
                           }
                         });
                       }
