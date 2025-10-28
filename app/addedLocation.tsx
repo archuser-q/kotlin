@@ -1,14 +1,50 @@
 import { cities, DataType } from "@/data/locationData";
 import { getWeather } from "@/utils/axios";
 import Ionicons from "@expo/vector-icons/build/Ionicons";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+
+const SEARCH_HISTORY_KEY = '@search_history';
 
 export default function AddedLocation() {
   const [query, setQuery] = useState("");
   const [filteredCities, setFilteredCities] = useState<DataType[]>([]);
+  const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const router = useRouter();
+
+  /*Load search history*/
+  useEffect(()=>{
+    loadSearchHistory();
+  },[])
+
+  const loadSearchHistory = async () => {
+    try{
+      const history = await AsyncStorage.getItem(SEARCH_HISTORY_KEY);
+    } catch(error){
+      console.error();
+    }
+  };
+
+  const saveToHistory = async (cityName: string) => {
+    try {
+      const newHistory = [cityName, ...searchHistory.filter(c => c !== cityName)].slice(0, 10);
+      await AsyncStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(newHistory));
+      setSearchHistory(newHistory);
+    } catch (error) {
+      console.error('Error saving search history:', error);
+    }
+  };
+
+  const clearHistory = async () => {
+    try {
+      await AsyncStorage.removeItem(SEARCH_HISTORY_KEY);
+      setSearchHistory([]);
+    } catch (error) {
+      console.error('Error clearing history:', error);
+    }
+  };
 
   const handleSearch = (text: string) => {
     setQuery(text);
@@ -51,6 +87,7 @@ export default function AddedLocation() {
               onPress={async()=>{
                 const weatherData = await getWeather(city.latitude, city.longitude);
                 if (weatherData){
+                  await saveToHistory(city.name);
                   router.push({
                     pathname: '/fullLocationInfo',
                     params: {
@@ -86,12 +123,12 @@ export default function AddedLocation() {
             <View className="mx-5 flex-1">
               <View className="flex-row justify-between items-center pb-4">
                 <Text className="text-lg pl-2 text-gray-400">Search history</Text>
-                <TouchableOpacity className="pr-2">
+                <TouchableOpacity className="pr-2" onPress={clearHistory}>
                   <Ionicons name="trash-outline" size={20} color="#9ca3af" />
                 </TouchableOpacity>
               </View>
               <View className="flex-row flex-wrap gap-3">
-                {["Hanoi", "Hue", "Saigon"].map((city, i) => (
+                {searchHistory.map((city, i) => (
                   <TouchableOpacity key={i} className="bg-gray-100 py-3 px-5 rounded-xl">
                     <Text className="text-center">{city}</Text>
                   </TouchableOpacity>
@@ -104,10 +141,24 @@ export default function AddedLocation() {
             <View className="mx-5">
               <Text className="text-lg pl-2 text-gray-400 pb-4">Popular location</Text>
               <View className="flex-row flex-wrap gap-3">
-                {["Saudi Arabia", "New Delhi", "Sydney", "Tokyo", "Seoul", "Beijing"].map(
+                {cities.slice(0, 5).map(
                   (city, i) => (
-                    <TouchableOpacity key={i} className="bg-gray-100 py-3 px-5 rounded-xl">
-                      <Text className="text-center">{city}</Text>
+                    <TouchableOpacity 
+                      key={i} 
+                      className="bg-gray-100 py-3 px-5 rounded-xl"
+                      onPress={async () => {
+                      const weatherData = await getWeather(city.latitude, city.longitude);
+                      if (weatherData) {
+                        router.push({
+                          pathname: '/fullLocationInfo',
+                          params: {
+                            cityName: city.name,
+                            weatherData: JSON.stringify(weatherData),
+                          }
+                        });
+                      }
+                    }}>
+                      <Text className="text-center">{city.name}</Text>
                     </TouchableOpacity>
                   )
                 )}
