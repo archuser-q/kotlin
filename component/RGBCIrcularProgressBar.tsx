@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Text } from 'react-native';
 import { AnimatedCircularProgress } from "react-native-circular-progress";
 
-export default function RGBCircularProgressBar() {
+export default function RGBCircularProgressBar({ filled = 10 }: { filled?: number }) {
   const [color, setColor] = useState("#22c55e");
   const getColorFromFill = (fill: number) => {
     if (fill < 20) return "#22c55e";   
@@ -11,7 +11,6 @@ export default function RGBCircularProgressBar() {
     if (fill < 80) return "#ef4444";   
     return "#8b5cf6";                  
   };
-  const filled = 10;
   useEffect(() => {
     setColor(getColorFromFill(filled));
   }, [filled]);

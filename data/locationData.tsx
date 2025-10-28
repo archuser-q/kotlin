@@ -1,10 +1,9 @@
-import { Float } from "react-native/Libraries/Types/CodegenTypes";
 
 export type DataType = {
     name: string;
     region: string;
-    longitude: Float;
-    latitude: Float;
+    longitude: number;
+    latitude: number;
 }
 
 export const cities: DataType[] = [

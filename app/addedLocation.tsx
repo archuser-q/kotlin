@@ -1,4 +1,5 @@
 import { cities, DataType } from "@/data/locationData";
+import { getWeather } from "@/utils/axios";
 import Ionicons from "@expo/vector-icons/build/Ionicons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -47,6 +48,18 @@ export default function AddedLocation() {
             <TouchableOpacity
               key={index}
               className="flex-row justify-between items-center py-3 border-gray-200"
+              onPress={async()=>{
+                const weatherData = await getWeather(city.latitude, city.longitude);
+                if (weatherData){
+                  router.push({
+                    pathname: '/fullLocationInfo',
+                    params: {
+                      cityName: city.name,
+                      weatherData: JSON.stringify(weatherData),
+                    }
+                  })
+                }
+              }}
             >
               <View>
                 <Text className="text-lg text-gray-800">{city.name}</Text>
