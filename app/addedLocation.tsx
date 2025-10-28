@@ -2,6 +2,8 @@ import { cities, DataType } from "@/data/locationData";
 import { getWeather } from "@/utils/axios";
 import Ionicons from "@expo/vector-icons/build/Ionicons";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Location from 'expo-location';
+import { LocationObject } from "expo-location";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -12,7 +14,32 @@ export default function AddedLocation() {
   const [query, setQuery] = useState("");
   const [filteredCities, setFilteredCities] = useState<DataType[]>([]);
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
+  const [location, setLocation] = useState<LocationObject | null>(null);
   const router = useRouter();
+
+  useEffect(()=>{
+    const getPermissions = async()=>{
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if(status!=='granted'){
+        console.log('Permission is not granted');
+        return;
+      }
+      let currentlocation = await Location.getCurrentPositionAsync();
+      setLocation(currentlocation);
+      console.log('Location:');
+      console.log(currentlocation);
+    };
+    getPermissions();
+  },[]);
+
+  const reverseGeoCode = async()=>{
+    const reverseGeocodeAsync = await Location.reverseGeocodeAsync({
+      longitude:location?.coords.longitude,
+      latitude:location?.coords.latitude,
+    });
+    console.log("Reversed Geocode: ");
+    console.log(reverseGeocodeAsync);
+  }
 
   /*Load search history*/
   useEffect(()=>{
@@ -111,7 +138,7 @@ export default function AddedLocation() {
             <View className="mx-5">
               <Text className="text-lg pl-2 text-gray-400">Current location</Text>
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={reverseGeoCode}>
               <View className="flex-row justify-center items-center bg-gray-100 rounded-2xl mx-4 py-6 gap-2">
                 <Ionicons name="location-outline" size={30} color="#3b82f6" />
                 <Text className="text-xl text-blue-500">Get current location</Text>
