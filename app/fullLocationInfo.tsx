@@ -1,8 +1,11 @@
 import CircularProgressBar from "@/component/CircularProgressBar";
+import DashCircularProgressBar from "@/component/DashCircularProgressBar";
 import RGBCircularProgressBar from "@/component/RGBCIrcularProgressBar";
 import { Wave } from "@/component/wave";
+import getWeatherGif from "@/utils/getWeatherGif";
+import getWindDirection from "@/utils/getWindDirection";
 import { useLocalSearchParams } from "expo-router";
-import { Droplet, Sun, Thermometer, Wind } from 'lucide-react-native';
+import { Droplet, Sun, Thermometer } from 'lucide-react-native';
 import { ImageBackground, ScrollView, Text, View } from "react-native";
 
 export default function fullLocationInfo(){
@@ -15,6 +18,7 @@ export default function fullLocationInfo(){
     }
     const { cityName, weatherData } = useLocalSearchParams();
     const weather = JSON.parse(weatherData as string); 
+    const windDirectionPercent = (weather.current.wind_direction_10m / 360) * 100;
     const data = [
         { time: "06:00", temp: "22" },
         { time: "09:00", temp: "25" },
@@ -26,7 +30,9 @@ export default function fullLocationInfo(){
     ];
     return(
         <ImageBackground
-            source={require("../assets/clearSkyNight.gif")}
+            source={getWeatherGif({
+                isDay: weather.current.is_day,
+            })}
             resizeMode="cover"
         >
             <ScrollView className="">
@@ -81,15 +87,26 @@ export default function fullLocationInfo(){
                             </CircularProgressBar>
                         </View>
                     </View>
-                    <View className="w-[100%] h-38 bg-white/20 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
-                        <View className="pb-20">
-                            <Text className="text-white">Northeast</Text>
-                            <Text className="text-2xl font-medium text-white">Force 2</Text>
-                        </View>
-                        <View className="pt-10">
-                            <Wind size={65} color="#3b82f6" />
+                    <View className="w-[100%] h-38 bg-white/20 rounded-2xl mb-5 py-5 pl-5 pr-5">
+                        <Text className="text-white text-lg font-semibold mb-3">Wind</Text>
+
+                        <View className="flex-row justify-between items-center">
+                            <View className="flex-1 gap-3">
+                                <Text className="text-white font-normal">Wind:</Text>
+                                <Text className="text-white font-normal">Wind gust:</Text>
+                                <Text className="text-white font-normal">Direction:</Text>
+                            </View>
+                            <View className="flex-1 gap-3">
+                                <Text className="text-white font-normal">{weather.current.wind_speed_10m} km/h</Text>
+                                <Text className="text-white font-normal">{weather.current.wind_gusts_10m} km/h</Text>
+                                <Text className="text-white font-normal">{weather.current.wind_direction_10m}° {getWindDirection(weather.current.wind_direction_10m)}</Text>
+                            </View>
+                            <View>
+                                <DashCircularProgressBar fill={windDirectionPercent}/>
+                            </View>
                         </View>
                     </View>
+
                     <View className="w-[49%] h-38 bg-white/20 rounded-2xl mb-5 pt-5 pl-5 flex-row items-center pr-5">
                         <View className="pb-20 flex-1">
                             <Text className="text-white">Rainfall</Text>
@@ -102,10 +119,10 @@ export default function fullLocationInfo(){
                     <View className="w-[49%] h-38 bg-white/20 rounded-2xl mb-5 pt-5 pl-5 flex-row items-center pr-5">
                         <View className="pb-20 flex-1">
                             <Text className="text-white">Real feel</Text>
-                            <Text className="text-2xl font-medium text-white">28°</Text>
+                            <Text className="text-2xl font-medium text-white">{Math.round(weather.daily.apparent_temperature_max[0])}°</Text>
                         </View>
                         <View className="pt-10">
-                            <CircularProgressBar fill={weather.current.relative_humidity_2m} tintColor="#3b82f6">
+                            <CircularProgressBar fill={weather.daily.apparent_temperature_max} tintColor="#3b82f6">
                                 {(fill) => <Thermometer size={24} color="#3b82f6" />}
                             </CircularProgressBar>
                         </View>
