@@ -26,20 +26,9 @@ export default function AddedLocation() {
       }
       let currentlocation = await Location.getCurrentPositionAsync();
       setLocation(currentlocation);
-      console.log('Location:');
-      console.log(currentlocation);
     };
     getPermissions();
   },[]);
-
-  const reverseGeoCode = async()=>{
-    const reverseGeocodeAsync = await Location.reverseGeocodeAsync({
-      longitude:location?.coords.longitude,
-      latitude:location?.coords.latitude,
-    });
-    console.log("Reversed Geocode: ");
-    console.log(reverseGeocodeAsync);
-  }
 
   /*Load search history*/
   useEffect(()=>{
@@ -138,7 +127,32 @@ export default function AddedLocation() {
             <View className="mx-5">
               <Text className="text-lg pl-2 text-gray-400">Current location</Text>
             </View>
-            <TouchableOpacity onPress={reverseGeoCode}>
+            <TouchableOpacity
+              onPress={async () => {
+                if (!location) return;
+
+                const [geo] = await Location.reverseGeocodeAsync({
+                  longitude: location.coords.longitude,
+                  latitude: location.coords.latitude,
+                });
+
+                const region = geo?.region || "Unknown";
+                const { latitude, longitude } = location.coords;
+
+                const weatherData = await getWeather(latitude, longitude);
+
+                router.push({
+                  pathname: "/fullLocationInfo",
+                  params: {
+                    cityName: region,
+                    region,
+                    latitude: String(latitude),
+                    longitude: String(longitude),
+                    weatherData: JSON.stringify(weatherData),
+                  },
+                });
+              }}
+            >
               <View className="flex-row justify-center items-center bg-gray-100 rounded-2xl mx-4 py-6 gap-2">
                 <Ionicons name="location-outline" size={30} color="#3b82f6" />
                 <Text className="text-xl text-blue-500">Get current location</Text>
