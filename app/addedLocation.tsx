@@ -102,6 +102,7 @@ export default function AddedLocation() {
               className="flex-row justify-between items-center py-3 border-gray-200"
               onPress={async()=>{
                 const weatherData = await getWeather(city.latitude, city.longitude);
+                const airQualityData = await getAirQuality(city.latitude, city.longitude);
                 if (weatherData){
                   await saveToHistory(city.name);
                   router.push({
@@ -109,6 +110,7 @@ export default function AddedLocation() {
                     params: {
                       cityName: city.name,
                       weatherData: JSON.stringify(weatherData),
+                      airQualityData: JSON.stringify(airQualityData),
                     }
                   })
                 }

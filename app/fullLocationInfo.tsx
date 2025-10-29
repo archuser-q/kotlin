@@ -27,6 +27,11 @@ export default function fullLocationInfo(){
         <ImageBackground
             source={getWeatherGif({
                 isDay: weather.current.is_day,
+                cloud_cover: weather.current.cloud_cover,
+                rain: weather.current.rain,
+                visibility: weather.current.visibility,
+                wind_gusts_10m: weather.current.wind_gusts_10m,
+                uv_index: weather.current.uv_index,
             })}
             resizeMode="cover"
         >
@@ -64,7 +69,7 @@ export default function fullLocationInfo(){
                         <View className="pb-20">
                             <Text className="text-white">UV</Text>
                             <Text className="text-2xl font-medium text-white">
-                                {getUVLevel(Math.min((weather.current.uv_index / 11) * 100, 100))}
+                                {getUVLevel(weather.current.uv_index)}
                             </Text>
                         </View>
                         <View className="pt-14">
