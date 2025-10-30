@@ -1,7 +1,7 @@
 import Ionicons from "@expo/vector-icons/build/Ionicons";
 import { useRouter } from "expo-router";
 import React from "react";
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ImageBackground, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export default function Index() {
   const router = useRouter();
@@ -32,6 +32,36 @@ export default function Index() {
         >
           Added location
         </Text>
+      </View>
+      <View className="pt-4 px-7 gap-4">
+          <ImageBackground
+            source={require("../assets/sunnyday.gif")}
+            resizeMode="cover"
+            className="bg-gray-300 flex-row justify-between py-4 rounded-3xl overflow-hidden"
+          >
+            <View className="flex-start pl-3 pt-1">
+              <Text className="text-2xl font-semibold text-white">Hanoi</Text>
+              <Text className="text-xl text-white">Clear</Text>
+            </View>
+            <View className="flex-end pr-3">
+              <Text className="text-5xl text-white">25℃</Text>
+              <Text className="text-white">32℃ /28℃</Text>
+            </View>
+          </ImageBackground>
+          <ImageBackground
+            source={require("../assets/sunnyday.gif")}
+            resizeMode="cover"
+            className="bg-gray-300 flex-row justify-between py-4 rounded-3xl overflow-hidden"
+          >
+            <View className="flex-start pl-3 pt-1">
+              <Text className="text-2xl font-semibold text-white">Ho Chi Minh</Text>
+              <Text className="text-xl text-white">Clear</Text>
+            </View>
+            <View className="flex-end pr-3">
+              <Text className="text-5xl text-white">28℃</Text>
+              <Text className="text-white">30℃ /23℃</Text>
+            </View>
+          </ImageBackground>
       </View>
     </ScrollView>
   );

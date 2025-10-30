@@ -2,27 +2,17 @@ import CircularProgressBar from "@/component/CircularProgressBar";
 import DashCircularProgressBar from "@/component/DashCircularProgressBar";
 import RGBCircularProgressBar from "@/component/RGBCIrcularProgressBar";
 import { Wave } from "@/component/wave";
+import { useData } from "@/data/serverData";
 import getUVLevel from "@/utils/getUVLevel";
 import getWeatherGif from "@/utils/getWeatherGif";
 import getWindDirection from "@/utils/getWindDirection";
-import { useLocalSearchParams } from "expo-router";
-import { Droplet, Sun, Thermometer } from 'lucide-react-native';
-import { ImageBackground, ScrollView, Text, View } from "react-native";
+import { useRouter } from "expo-router";
+import { Droplet, EllipsisVertical, Plus, Sun, Thermometer } from 'lucide-react-native';
+import { ImageBackground, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 export default function fullLocationInfo(){
-    const { cityName, weatherData, airQualityData } = useLocalSearchParams();
-    const weather = JSON.parse(weatherData as string); 
-    const airQuality = JSON.parse(airQualityData as string);
-    const windDirectionPercent = (weather.current.wind_direction_10m / 360) * 100;
-    const data = [
-        { time: "06:00", temp: "22" },
-        { time: "09:00", temp: "25" },
-        { time: "12:00", temp: "28" },
-        { time: "15:00", temp: "27" },
-        { time: "18:00", temp: "24" },
-        { time: "21:00", temp: "23" },
-        { time: "00:00", temp: "22" },
-    ];
+    const { cityName, weather, airQuality, windDirectionPercent, data } = useData();
+    const router = useRouter();
     return(
         <ImageBackground
             source={getWeatherGif({
@@ -36,16 +26,37 @@ export default function fullLocationInfo(){
             resizeMode="cover"
         >
             <ScrollView className="">
+                <View className="flex-row justify-between pt-10 px-4">
+                    <TouchableOpacity
+                        onPress={()=>router.push("/addedLocation")}
+                    >
+                        <View className="font-2xl bg-white/20 rounded-3xl py-2 px-3">
+                            <Text className="text-white">Cancel</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <View className="font-2xl bg-white/20 rounded-3xl py-2 px-5">
+                            <Text className="text-white">Add</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+                <View className="flex-row justify-between pt-10 px-4">
+                    <View></View>
+                    <View className="flex-row gap-5">
+                        <Plus color={'white'} size={30}/>
+                        <EllipsisVertical color={'white'} size={30}/>
+                    </View>
+                </View>
                 <View className="pt-36 pl-7 gap-5 pb-96">
                     <Text className="text-xl text-white">{cityName}</Text>
                     <Text className="text-9xl text-white">{Math.round(weather.current.temperature_2m)}°</Text>
                     <Text className="text-xl text-white">Clear {Math.round(weather.daily.temperature_2m_max[0])}°/{Math.round(weather.daily.temperature_2m_min[0])}°</Text>
                 </View>
-                <View className="mt-8 px-6">
+                <View className="mt-8 px-4">
                     <View
-                        className="bg-white/20 rounded-3xl p-5"
+                        className="bg-black/40 rounded-3xl p-5"
                     >
-                        <Text className="text-xl font-medium mb-3 text-white">Hourly Forecast</Text>
+                        <Text className="text-xl font-medium mb-5 ml-2 text-white">Hourly Forecast</Text>
                         <ScrollView
                             horizontal
                             showsHorizontalScrollIndicator={false}
@@ -54,18 +65,18 @@ export default function fullLocationInfo(){
                             {data.map((item,index)=>(
                                 <View
                                     key={index}
-                                    className="items-center justify-center mr-4 gap-3"
+                                    className="items-center justify-center mr-10 gap-3"
                                 >
-                                    <Text className="font-medium text-white">{item.time}</Text>
-                                    <Sun size={30} color="white" fill="white" />
-                                    <Text className="font-medium text-center text-white">{item.temp}°</Text>
+                                    <Text className="font-2xl text-white">{item.time}</Text>
+                                    <Sun size={45} color="white" fill="white" />
+                                    <Text className="font-2xl text-center text-white">{item.temp}°</Text>
                                 </View>
                             ))}
                         </ScrollView>
                     </View>
                 </View>
-                <View className="flex-row flex-wrap justify-between px-6 pt-5 pb-10">
-                    <View className="w-[49%] h-38 bg-white/20 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
+                <View className="flex-row flex-wrap justify-between px-4 pt-5 pb-10">
+                    <View className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
                         <View className="pb-20">
                             <Text className="text-white">UV</Text>
                             <Text className="text-2xl font-medium text-white">
@@ -76,7 +87,7 @@ export default function fullLocationInfo(){
                             <RGBCircularProgressBar filled={Math.min((weather.current.uv_index / 11) * 100, 100)} />
                         </View>
                     </View>
-                    <View className="w-[49%] h-38 bg-white/20 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
+                    <View className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
                         <View className="pb-20">
                             <Text className="text-white">Humidity</Text>
                             <Text className="text-2xl font-medium text-white">{Math.round(weather.current.relative_humidity_2m)}%</Text>
@@ -87,7 +98,7 @@ export default function fullLocationInfo(){
                             </CircularProgressBar>
                         </View>
                     </View>
-                    <View className="w-[100%] h-38 bg-white/20 rounded-2xl mb-5 py-5 pl-5 pr-5">
+                    <View className="w-[100%] h-50 bg-black/40 rounded-2xl mb-5 py-5 pl-5 pr-5">
                         <Text className="text-white text-lg font-semibold mb-3">Wind</Text>
 
                         <View className="flex-row justify-between items-center">
@@ -107,7 +118,7 @@ export default function fullLocationInfo(){
                         </View>
                     </View>
 
-                    <View className="w-[49%] h-38 bg-white/20 rounded-2xl mb-5 pt-5 pl-5 flex-row items-center pr-5">
+                    <View className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row items-center pr-5">
                         <View className="pb-20 flex-1">
                             <Text className="text-white">Rainfall</Text>
                             <Text className="text-2xl font-medium text-white">{weather.current.rain}mm</Text>
@@ -116,18 +127,18 @@ export default function fullLocationInfo(){
                             <Wave size={67} value={Math.min((weather.current.rain /10) * 100, 100)}/>
                         </View>
                     </View>
-                    <View className="w-[49%] h-38 bg-white/20 rounded-2xl mb-5 pt-5 pl-5 flex-row items-center pr-5">
+                    <View className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row items-center pr-5">
                         <View className="pb-20 flex-1">
                             <Text className="text-white">Real feel</Text>
-                            <Text className="text-2xl font-medium text-white">{Math.round(weather.daily.apparent_temperature_max[0])}°</Text>
+                            <Text className="text-2xl font-medium text-white">{Math.round((weather.daily.apparent_temperature_max[0] + weather.daily.apparent_temperature_min[0]) / 2)}°</Text>
                         </View>
                         <View className="pt-10">
-                            <CircularProgressBar fill={weather.daily.apparent_temperature_max} tintColor="#3b82f6">
+                            <CircularProgressBar fill={Math.round(weather.daily.apparent_temperature_max[0])} tintColor="#3b82f6">
                                 {(fill) => <Thermometer size={24} color="#3b82f6" />}
                             </CircularProgressBar>
                         </View>
                     </View>
-                    <View className="w-[100%] h-38 bg-white/20 rounded-2xl mb-5 py-5 pl-5 pr-5">
+                    <View className="w-[100%] h-50 bg-black/40 rounded-2xl mb-5 py-5 pl-5 pr-5">
                         <Text className="text-white text-lg font-semibold mb-3">Vision</Text>
 
                         <View className="flex-row justify-between items-center">
@@ -155,13 +166,13 @@ export default function fullLocationInfo(){
                             </View>
                         </View>
                     </View>
-                    <View className="w-[49%] h-38 bg-white/20 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
+                    <View className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
                         <View className="pb-20">
                             <Text className="text-white">Air quality</Text>
                             <Text className="text-2xl font-medium text-white">{airQuality.hourly.european_aqi[0]}</Text>
                         </View>
                     </View>
-                    <View className="w-[49%] h-38 bg-white/20 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
+                    <View className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
                         <View className="pb-20">
                             <Text className="text-white">Pressure</Text>
                             <Text className="text-2xl font-medium text-white">{Math.round(weather.current.pressure_msl)}</Text>
@@ -176,7 +187,7 @@ export default function fullLocationInfo(){
                             </CircularProgressBar>
                         </View>
                     </View>
-                    <View className="w-[49%] h-38 bg-white/20 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
+                    <View className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
                         <View className="pb-20">
                             <Text className="text-white">Cloud</Text>
                             <Text className="text-2xl font-medium text-white">{Math.round(weather.current.cloud_cover)}</Text>
