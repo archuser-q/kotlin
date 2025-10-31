@@ -21,11 +21,7 @@ export default function fullLocationInfo(){
     const { latitude, longitude } = useLocationStore();
     const gifSource = getWeatherGif({
                 isDay: weather.current.is_day,
-                cloud_cover: weather.current.cloud_cover,
-                rain: weather.current.rain,
-                visibility: weather.current.visibility,
-                wind_gusts_10m: weather.current.wind_gusts_10m,
-                uv_index: weather.current.uv_index,
+                weathercode: weather.current.weathercode,
             });
 
     const [isCardExist, setIsCardExist] = useState(false);
@@ -60,7 +56,7 @@ export default function fullLocationInfo(){
                                 onPress={async() => {
                                     await addCard( 
                                         cityName,
-                                        'Clear',
+                                        getWeatherDescription(weather.current.weathercode),
                                         Math.round(weather.current.temperature_2m),
                                         Math.round(weather.daily.temperature_2m_max[0]),
                                         Math.round(weather.daily.temperature_2m_min[0]),
@@ -68,11 +64,7 @@ export default function fullLocationInfo(){
                                         latitude,
                                         {
                                             isDay: weather.current.is_day,
-                                            cloud_cover: weather.current.cloud_cover,
-                                            rain: weather.current.rain,
-                                            visibility: weather.current.visibility,
-                                            wind_gusts_10m: weather.current.wind_gusts_10m,
-                                            uv_index: weather.current.uv_index,
+                                            weathercode: weather.current.weathercode,
                                         }  
                                     );
                                     router.push("/");
@@ -88,7 +80,11 @@ export default function fullLocationInfo(){
                             <View>
                             </View>
                             <View className="flex-row gap-5">
-                                <Plus color={'white'} size={30}/>
+                                <TouchableOpacity 
+                                    onPress={()=>router.push("/")}    
+                                >
+                                    <Plus color={'white'} size={30}/>
+                                </TouchableOpacity>
                                 <EllipsisVertical color={'white'} size={30}/>
                             </View>
                         </>
@@ -168,10 +164,10 @@ export default function fullLocationInfo(){
                     <View className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row items-center pr-5">
                         <View className="pb-20 flex-1">
                             <Text className="text-white">Rainfall</Text>
-                            <Text className="text-2xl font-medium text-white">{weather.current.rain}mm</Text>
+                            <Text className="text-2xl font-medium text-white">{weather.daily.showers_sum[0]}mm</Text>
                         </View>
                         <View className="pt-10">
-                            <Wave size={67} value={Math.min((weather.current.rain /10) * 100, 100)}/>
+                            <Wave size={67} value={Math.min((weather.daily.showers_sum[0] / 50) * 100, 100)}/>
                         </View>
                     </View>
                     <View className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row items-center pr-5">

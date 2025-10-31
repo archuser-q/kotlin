@@ -19,11 +19,7 @@ interface CardState {
     minTemp: number;
     weatherParams: {
       isDay: number;
-      cloud_cover: number;
-      rain: number;
-      visibility: number;
-      wind_gusts_10m: number;
-      uv_index: number;
+      weathercode: number;
     };
   }>;
   addCard: (
@@ -36,11 +32,7 @@ interface CardState {
     longitude: number, 
     weatherParams: {
       isDay: number;
-      cloud_cover: number;
-      rain: number;
-      visibility: number;
-      wind_gusts_10m: number;
-      uv_index: number;
+      weathercode: number;
     }) => Promise<void>;
   loadCards: () => Promise<void>;
   removeCards: (index: number) => Promise<void>
