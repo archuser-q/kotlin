@@ -2,12 +2,16 @@ import { useCardStore } from "@/store/cityCardStore";
 import { getAirQuality, getWeather } from "@/utils/axios";
 import Ionicons from "@expo/vector-icons/build/Ionicons";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useEffect } from "react";
 import { ImageBackground, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export default function Index() {
   const router = useRouter();
-  const { cards } = useCardStore();
+  const { cards, loadCards } = useCardStore();
+
+  useEffect(()=>{
+    loadCards();
+  },[])
   return (
     <ScrollView className="bg-white">
       <View className="pt-12 pl-5 pb-10">

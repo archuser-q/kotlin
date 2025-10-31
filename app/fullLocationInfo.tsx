@@ -40,18 +40,18 @@ export default function fullLocationInfo(){
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={() => {
-                        addCard( 
-                            cityName,
-                            'Clear',
-                            Math.round(weather.current.temperature_2m),
-                            Math.round(weather.daily.temperature_2m_max[0]),
-                            Math.round(weather.daily.temperature_2m_min[0]),
-                            longitude,
-                            latitude,
-                            gifSource    
-                        );
-                        router.push("/");
+                        onPress={async() => {
+                            await addCard( 
+                                cityName,
+                                'Clear',
+                                Math.round(weather.current.temperature_2m),
+                                Math.round(weather.daily.temperature_2m_max[0]),
+                                Math.round(weather.daily.temperature_2m_min[0]),
+                                longitude,
+                                latitude,
+                                gifSource    
+                            );
+                            router.push("/");
                     }}>
                         <View className="font-2xl bg-white/20 rounded-3xl py-2 px-5">
                             <Text className="text-white">Add</Text>
