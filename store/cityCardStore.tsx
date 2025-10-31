@@ -7,15 +7,16 @@ interface CardState {
   maxTemp: number;
   minTemp: number;
   latitude: number;  
-  longitude: number; 
+  longitude: number;
   cards: Array<{
     cityName: string;
     description: string;
     currentTemp: number;
     maxTemp: number;
     minTemp: number;
+    gif: any;
   }>;
-  addCard: (cityName: string, description: string, currentTemp: number, maxTemp: number, minTemp: number, latitude: number, longitude: number) => void;
+  addCard: (cityName: string, description: string, currentTemp: number, maxTemp: number, minTemp: number, latitude: number, longitude: number, gif: any) => void;
 }
 
 export const useCardStore = create<CardState>((set) => ({
@@ -27,8 +28,8 @@ export const useCardStore = create<CardState>((set) => ({
   longitude: 0,
   latitude: 0,
   cards: [],
-  addCard: (cityName, description, currentTemp, maxTemp, minTemp, longitude,latitude) =>
+  addCard: (cityName, description, currentTemp, maxTemp, minTemp, longitude,latitude,gif) =>
     set((state) => ({
-      cards: [...state.cards, { cityName, description, currentTemp, maxTemp, minTemp, longitude, latitude }]
+      cards: [...state.cards, { cityName, description, currentTemp, maxTemp, minTemp, longitude, latitude, gif }]
     })),
 }));

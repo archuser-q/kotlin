@@ -58,7 +58,7 @@ export default function Index() {
             >
               <ImageBackground
                   key={index}
-                  source={require("../assets/sunnyday.gif")}
+                  source={card.gif}
                   resizeMode="cover"
                   className="bg-gray-300 flex-row justify-between py-4 rounded-3xl overflow-hidden"
               >

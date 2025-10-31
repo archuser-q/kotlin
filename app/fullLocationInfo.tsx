@@ -17,16 +17,17 @@ export default function fullLocationInfo(){
     const router = useRouter();
     const {addCard} = useCardStore();
     const { latitude, longitude } = useLocationStore();
-    return(
-        <ImageBackground
-            source={getWeatherGif({
+    const gifSource = getWeatherGif({
                 isDay: weather.current.is_day,
                 cloud_cover: weather.current.cloud_cover,
                 rain: weather.current.rain,
                 visibility: weather.current.visibility,
                 wind_gusts_10m: weather.current.wind_gusts_10m,
                 uv_index: weather.current.uv_index,
-            })}
+            });
+    return(
+        <ImageBackground
+            source={gifSource}
             resizeMode="cover"
         >
             <ScrollView className="">
@@ -47,7 +48,8 @@ export default function fullLocationInfo(){
                             Math.round(weather.daily.temperature_2m_max[0]),
                             Math.round(weather.daily.temperature_2m_min[0]),
                             longitude,
-                            latitude    
+                            latitude,
+                            gifSource    
                         );
                         router.push("/");
                     }}>
