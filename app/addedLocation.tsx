@@ -1,4 +1,5 @@
 import { cities, DataType } from "@/data/locationData";
+import { useLocationStore } from "@/store/locationStore";
 import { getAirQuality, getWeather } from "@/utils/axios";
 import Ionicons from "@expo/vector-icons/build/Ionicons";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -15,6 +16,7 @@ export default function AddedLocation() {
   const [filteredCities, setFilteredCities] = useState<DataType[]>([]);
   const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const [location, setLocation] = useState<LocationObject | null>(null);
+  const {setSavedLocation} = useLocationStore();
   const router = useRouter();
 
   useEffect(()=>{
@@ -104,6 +106,7 @@ export default function AddedLocation() {
                 const weatherData = await getWeather(city.latitude, city.longitude);
                 const airQualityData = await getAirQuality(city.latitude, city.longitude);
                 if (weatherData){
+                  setSavedLocation(city.name, city.latitude, city.longitude);
                   await saveToHistory(city.name);
                   router.push({
                     pathname: '/fullLocationInfo',
@@ -140,6 +143,8 @@ export default function AddedLocation() {
 
                 const region = geo?.region || "Unknown";
                 const { latitude, longitude } = location.coords;
+
+                setSavedLocation(region, latitude, longitude);
 
                 const weatherData = await getWeather(latitude, longitude);
                 const airQualityData = await getAirQuality(latitude, longitude);
@@ -192,18 +197,19 @@ export default function AddedLocation() {
                       key={i} 
                       className="bg-gray-100 py-3 px-5 rounded-xl"
                       onPress={async () => {
-                      const weatherData = await getWeather(city.latitude, city.longitude);
-                      const airQualityData = await getAirQuality(city.latitude, city.longitude);
-                      if (weatherData) {
-                        router.push({
-                          pathname: '/fullLocationInfo',
-                          params: {
-                            cityName: city.name,
-                            weatherData: JSON.stringify(weatherData),
-                            airQualityData: JSON.stringify(airQualityData)
-                          }
-                        });
-                      }
+                        setSavedLocation(city.name, city.latitude, city.longitude);
+                        const weatherData = await getWeather(city.latitude, city.longitude);
+                        const airQualityData = await getAirQuality(city.latitude, city.longitude);
+                        if (weatherData) {
+                          router.push({
+                            pathname: '/fullLocationInfo',
+                            params: {
+                              cityName: city.name,
+                              weatherData: JSON.stringify(weatherData),
+                              airQualityData: JSON.stringify(airQualityData)
+                            }
+                          });
+                        }
                     }}>
                       <Text className="text-center">{city.name}</Text>
                     </TouchableOpacity>

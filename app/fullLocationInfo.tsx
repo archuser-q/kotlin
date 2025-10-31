@@ -3,6 +3,8 @@ import DashCircularProgressBar from "@/component/DashCircularProgressBar";
 import RGBCircularProgressBar from "@/component/RGBCIrcularProgressBar";
 import { Wave } from "@/component/wave";
 import { useData } from "@/data/serverData";
+import { useCardStore } from "@/store/cityCardStore";
+import { useLocationStore } from "@/store/locationStore";
 import getUVLevel from "@/utils/getUVLevel";
 import getWeatherGif from "@/utils/getWeatherGif";
 import getWindDirection from "@/utils/getWindDirection";
@@ -13,6 +15,8 @@ import { ImageBackground, ScrollView, Text, TouchableOpacity, View } from "react
 export default function fullLocationInfo(){
     const { cityName, weather, airQuality, windDirectionPercent, data } = useData();
     const router = useRouter();
+    const {addCard} = useCardStore();
+    const { latitude, longitude } = useLocationStore();
     return(
         <ImageBackground
             source={getWeatherGif({
@@ -34,7 +38,19 @@ export default function fullLocationInfo(){
                             <Text className="text-white">Cancel</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
+                        addCard( 
+                            cityName,
+                            'Clear',
+                            Math.round(weather.current.temperature_2m),
+                            Math.round(weather.daily.temperature_2m_max[0]),
+                            Math.round(weather.daily.temperature_2m_min[0]),
+                            longitude,
+                            latitude    
+                        );
+                        router.push("/");
+                    }}>
                         <View className="font-2xl bg-white/20 rounded-3xl py-2 px-5">
                             <Text className="text-white">Add</Text>
                         </View>
