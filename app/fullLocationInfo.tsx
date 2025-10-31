@@ -6,16 +6,18 @@ import { useData } from "@/data/serverData";
 import { useCardStore } from "@/store/cityCardStore";
 import { useLocationStore } from "@/store/locationStore";
 import getUVLevel from "@/utils/getUVLevel";
+import getWeatherDescription from "@/utils/getWeatherDescription";
 import getWeatherGif from "@/utils/getWeatherGif";
 import getWindDirection from "@/utils/getWindDirection";
 import { useRouter } from "expo-router";
 import { Droplet, EllipsisVertical, Plus, Sun, Thermometer } from 'lucide-react-native';
+import { useEffect, useState } from "react";
 import { ImageBackground, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 export default function fullLocationInfo(){
     const { cityName, weather, airQuality, windDirectionPercent, data } = useData();
     const router = useRouter();
-    const {addCard} = useCardStore();
+    const { addCard, removeCards, cards} = useCardStore();
     const { latitude, longitude } = useLocationStore();
     const gifSource = getWeatherGif({
                 isDay: weather.current.is_day,
@@ -25,50 +27,77 @@ export default function fullLocationInfo(){
                 wind_gusts_10m: weather.current.wind_gusts_10m,
                 uv_index: weather.current.uv_index,
             });
+
+    const [isCardExist, setIsCardExist] = useState(false);
+    const [existingCardIndex, setExistingCardIndex] = useState(-1);
+
+    useEffect(() => {
+        const index = cards.findIndex(
+            card => card.cityName === cityName && 
+                    card.latitude === latitude && 
+                    card.longitude === longitude
+        );
+        setIsCardExist(index !== -1);
+        setExistingCardIndex(index);
+    }, [cards, cityName, latitude, longitude]);
+
+
     return(
         <ImageBackground
             source={gifSource}
             resizeMode="cover"
         >
             <ScrollView className="">
-                <View className="flex-row justify-between pt-10 px-4">
-                    <TouchableOpacity
-                        onPress={()=>router.push("/addedLocation")}
-                    >
-                        <View className="font-2xl bg-white/20 rounded-3xl py-2 px-3">
-                            <Text className="text-white">Cancel</Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={async() => {
-                            await addCard( 
-                                cityName,
-                                'Clear',
-                                Math.round(weather.current.temperature_2m),
-                                Math.round(weather.daily.temperature_2m_max[0]),
-                                Math.round(weather.daily.temperature_2m_min[0]),
-                                longitude,
-                                latitude,
-                                gifSource    
-                            );
-                            router.push("/");
-                    }}>
-                        <View className="font-2xl bg-white/20 rounded-3xl py-2 px-5">
-                            <Text className="text-white">Add</Text>
-                        </View>
-                    </TouchableOpacity>
+                <View className="flex-row justify-between pt-16 px-4">
+                    {!isCardExist ? (
+                        <>
+                            <TouchableOpacity onPress={() => router.push("/addedLocation")}>
+                                <View className="font-2xl bg-white/20 rounded-3xl py-2 px-3">
+                                    <Text className="text-white">Cancel</Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={async() => {
+                                    await addCard( 
+                                        cityName,
+                                        'Clear',
+                                        Math.round(weather.current.temperature_2m),
+                                        Math.round(weather.daily.temperature_2m_max[0]),
+                                        Math.round(weather.daily.temperature_2m_min[0]),
+                                        longitude,
+                                        latitude,
+                                        {
+                                            isDay: weather.current.is_day,
+                                            cloud_cover: weather.current.cloud_cover,
+                                            rain: weather.current.rain,
+                                            visibility: weather.current.visibility,
+                                            wind_gusts_10m: weather.current.wind_gusts_10m,
+                                            uv_index: weather.current.uv_index,
+                                        }  
+                                    );
+                                    router.push("/");
+                                }}
+                            >
+                                <View className="font-2xl bg-white/20 rounded-3xl py-2 px-5">
+                                    <Text className="text-white">Add</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </>
+                    ) : (
+                        <>
+                            <View>
+                            </View>
+                            <View className="flex-row gap-5">
+                                <Plus color={'white'} size={30}/>
+                                <EllipsisVertical color={'white'} size={30}/>
+                            </View>
+                        </>
+                    )}
                 </View>
-                <View className="flex-row justify-between pt-10 px-4">
-                    <View></View>
-                    <View className="flex-row gap-5">
-                        <Plus color={'white'} size={30}/>
-                        <EllipsisVertical color={'white'} size={30}/>
-                    </View>
-                </View>
-                <View className="pt-36 pl-7 gap-5 pb-96">
+                <View className="pt-20 pl-7 gap-5 pb-96">
                     <Text className="text-xl text-white">{cityName}</Text>
                     <Text className="text-9xl text-white">{Math.round(weather.current.temperature_2m)}°</Text>
-                    <Text className="text-xl text-white">Clear {Math.round(weather.daily.temperature_2m_max[0])}°/{Math.round(weather.daily.temperature_2m_min[0])}°</Text>
+                    <Text className="text-xl text-white">{getWeatherDescription(weather.current.weathercode)} {Math.round(weather.daily.temperature_2m_max[0])}°/{Math.round(weather.daily.temperature_2m_min[0])}°</Text>
                 </View>
                 <View className="mt-8 px-4">
                     <View

@@ -17,7 +17,14 @@ interface CardState {
     currentTemp: number;
     maxTemp: number;
     minTemp: number;
-    gif: any;
+    weatherParams: {
+      isDay: number;
+      cloud_cover: number;
+      rain: number;
+      visibility: number;
+      wind_gusts_10m: number;
+      uv_index: number;
+    };
   }>;
   addCard: (
     cityName: string, 
@@ -27,9 +34,16 @@ interface CardState {
     minTemp: number, 
     latitude: number, 
     longitude: number, 
-    gif: any) => Promise<void>;
-    loadCards: () => Promise<void>;
-    removeCards: (index: number) => Promise<void>
+    weatherParams: {
+      isDay: number;
+      cloud_cover: number;
+      rain: number;
+      visibility: number;
+      wind_gusts_10m: number;
+      uv_index: number;
+    }) => Promise<void>;
+  loadCards: () => Promise<void>;
+  removeCards: (index: number) => Promise<void>
 }
 
 export const useCardStore = create<CardState>((set, get) => ({
@@ -41,9 +55,9 @@ export const useCardStore = create<CardState>((set, get) => ({
   longitude: 0,
   latitude: 0,
   cards: [],
-  addCard: async (cityName, description, currentTemp, maxTemp, minTemp, longitude, latitude, gif) => {
+  addCard: async (cityName, description, currentTemp, maxTemp, minTemp, longitude, latitude, weatherParams) => {
     const newCard = {
-      cityName, description, currentTemp, maxTemp, minTemp, longitude, latitude, gif
+      cityName, description, currentTemp, maxTemp, minTemp, longitude, latitude, weatherParams
     };
     const updatedCards = [...get().cards,newCard];
     set({cards: updatedCards});

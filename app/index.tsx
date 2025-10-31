@@ -1,5 +1,6 @@
 import { useCardStore } from "@/store/cityCardStore";
 import { getAirQuality, getWeather } from "@/utils/axios";
+import getWeatherGif from "@/utils/getWeatherGif";
 import Ionicons from "@expo/vector-icons/build/Ionicons";
 import { useRouter } from "expo-router";
 import React, { useEffect } from "react";
@@ -62,7 +63,7 @@ export default function Index() {
             >
               <ImageBackground
                   key={index}
-                  source={card.gif}
+                  source={getWeatherGif(card.weatherParams)}
                   resizeMode="cover"
                   className="bg-gray-300 flex-row justify-between py-4 rounded-3xl overflow-hidden"
               >
