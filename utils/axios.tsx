@@ -10,7 +10,7 @@ async function getWeather(latitude: number, longitude: number) {
         timezone: 'auto',
         current: 'temperature_2m,relative_humidity_2m,uv_index,rain,wind_speed_10m,wind_gusts_10m,wind_direction_10m,pressure_msl,is_day,visibility,cloud_cover,weathercode',
         daily: 'temperature_2m_max,temperature_2m_min,sunrise,sunset,apparent_temperature_max,apparent_temperature_min,showers_sum,weathercode',
-        hourly: 'temperature_2m,weathercode'
+        hourly: 'temperature_2m,weathercode,uv_index,relative_humidity_2m,apparent_temperature,pressure_msl,cloud_cover,apparent_temperature,rain'
       }
     });
     return response.data;

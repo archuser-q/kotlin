@@ -1,5 +1,6 @@
 import CircularProgressBar from "@/component/CircularProgressBar";
 import DashCircularProgressBar from "@/component/DashCircularProgressBar";
+import Modal from "@/component/Modal";
 import RGBCircularProgressBar from "@/component/RGBCIrcularProgressBar";
 import { Wave } from "@/component/wave";
 import { useCardStore } from "@/store/cityCardStore";
@@ -33,6 +34,15 @@ export default function fullLocationInfo(){
 
     const router = useRouter();
     const { addCard, removeCards, cards} = useCardStore();
+    const [showModal, setShowModal] = useState(false);
+    const [modalTitle, setModalTitle] = useState('');
+    const [modalType, setModalType] = useState('');
+
+    const openModal = (title: string, type: string) => {
+        setModalTitle(title);
+        setModalType(type);
+        setShowModal(true);
+    };
 
     useEffect(() => {
         const index = cards.findIndex(
@@ -196,7 +206,10 @@ export default function fullLocationInfo(){
                     </View>
                 </View>
                 <View className="flex-row flex-wrap justify-between px-4 pt-5 pb-10">
-                    <View className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
+                    <TouchableOpacity 
+                        className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5"
+                        onPress={() => openModal('UV Index', 'uv')}
+                    >
                         <View className="pb-20">
                             <Text className="text-white">UV</Text>
                             <Text className="text-2xl font-medium text-white">
@@ -206,8 +219,11 @@ export default function fullLocationInfo(){
                         <View className="pt-14">
                             <RGBCircularProgressBar filled={Math.min((weather.current.uv_index / 11) * 100, 100)} />
                         </View>
-                    </View>
-                    <View className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                        className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5"
+                        onPress={() => openModal('Humidity', 'humidity')}
+                    >
                         <View className="pb-20">
                             <Text className="text-white">Humidity</Text>
                             <Text className="text-2xl font-medium text-white">{Math.round(weather.current.relative_humidity_2m)}%</Text>
@@ -217,7 +233,7 @@ export default function fullLocationInfo(){
                                 {(fill) => <Droplet size={24} color="#3b82f6" fill="#3b82f6" />}
                             </CircularProgressBar>
                         </View>
-                    </View>
+                    </TouchableOpacity>
                     <View className="w-[100%] h-50 bg-black/40 rounded-2xl mb-5 py-5 pl-5 pr-5">
                         <Text className="text-white text-lg font-semibold mb-3">Wind</Text>
 
@@ -238,7 +254,10 @@ export default function fullLocationInfo(){
                         </View>
                     </View>
 
-                    <View className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row items-center pr-5">
+                    <TouchableOpacity 
+                        className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row items-center pr-5"
+                        onPress={() => openModal('Rainfall', 'rainfall')}
+                    >
                         <View className="pb-20 flex-1">
                             <Text className="text-white">Rainfall</Text>
                             <Text className="text-2xl font-medium text-white">{weather.daily.showers_sum[0]}mm</Text>
@@ -246,18 +265,21 @@ export default function fullLocationInfo(){
                         <View className="pt-10">
                             <Wave size={67} value={Math.min((weather.daily.showers_sum[0] / 50) * 100, 100)}/>
                         </View>
-                    </View>
-                    <View className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row items-center pr-5">
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                        className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row items-center pr-5"
+                        onPress={() => openModal('Real Feel', 'realfeel')}
+                    >
                         <View className="pb-20 flex-1">
                             <Text className="text-white">Real feel</Text>
-                            <Text className="text-2xl font-medium text-white">{Math.round((weather.daily.apparent_temperature_max[0] + weather.daily.apparent_temperature_min[0]) / 2)}°</Text>
+                            <Text className="text-2xl font-medium text-white">{weather.hourly.apparent_temperature[0]}°</Text>
                         </View>
                         <View className="pt-10">
                             <CircularProgressBar fill={Math.round(weather.daily.apparent_temperature_max[0])} tintColor="#3b82f6">
                                 {(fill) => <Thermometer size={24} color="#3b82f6" />}
                             </CircularProgressBar>
                         </View>
-                    </View>
+                    </TouchableOpacity>
                     <View className="w-[100%] h-50 bg-black/40 rounded-2xl mb-5 py-5 pl-5 pr-5">
                         <Text className="text-white text-lg font-semibold mb-3">Vision</Text>
 
@@ -286,13 +308,19 @@ export default function fullLocationInfo(){
                             </View>
                         </View>
                     </View>
-                    <View className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
+                    <TouchableOpacity 
+                        className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5"
+                        onPress={() => openModal('Air Quality', 'airquality')}
+                    >
                         <View className="pb-20">
                             <Text className="text-white">Air quality</Text>
                             <Text className="text-2xl font-medium text-white">{airQuality.hourly.european_aqi[0]}</Text>
                         </View>
-                    </View>
-                    <View className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                        className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5"
+                        onPress={() => openModal('Pressure', 'pressure')}
+                    >
                         <View className="pb-20">
                             <Text className="text-white">Pressure</Text>
                             <Text className="text-2xl font-medium text-white">{Math.round(weather.current.pressure_msl)}</Text>
@@ -306,8 +334,11 @@ export default function fullLocationInfo(){
                                 )}
                             </CircularProgressBar>
                         </View>
-                    </View>
-                    <View className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                        className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5"
+                        onPress={() => openModal('Cloud Cover', 'cloud')}
+                    >
                         <View className="pb-20">
                             <Text className="text-white">Cloud</Text>
                             <Text className="text-2xl font-medium text-white">{Math.round(weather.current.cloud_cover)}</Text>
@@ -316,9 +347,17 @@ export default function fullLocationInfo(){
                             <CircularProgressBar fill={Math.round(weather.current.cloud_cover)} tintColor="#3b82f6">
                             </CircularProgressBar>
                         </View>
-                    </View>
+                    </TouchableOpacity>
                 </View>
             </ScrollView>
+            <Modal 
+                visible={showModal} 
+                onClose={() => setShowModal(false)} 
+                title={modalTitle}
+                type={modalType}
+                weather={weather}
+                airQuality={airQuality}
+            />
         </ImageBackground>
     );
 }
