@@ -1,5 +1,6 @@
 import { useFont } from "@shopify/react-native-skia";
 import { Dimensions, View } from "react-native";
+import { useDerivedValue } from "react-native-reanimated";
 import { CartesianChart, Line, useChartPressState } from "victory-native";
 import roboto from '../assets/fonts/Roboto-Regular.ttf';
 import ToolTip from "./lineComponent/customToolTip";
@@ -25,6 +26,12 @@ export default function GeneralLineChart({
     x: 0, 
     y: { [yKey]: 0 } 
   });
+
+  const labelValue = useDerivedValue(() => {
+    const currentHour = Math.round(state.x.value.value);
+    const currentData = data.find(item => item.hour === currentHour);
+    return currentData?.label || '';
+  });
   
   if (!font) {
     return <View style={{ height, width: '100%' }} />;
@@ -41,32 +48,28 @@ export default function GeneralLineChart({
         chartPressState={state}
       >
         {({ points }) => {
-  const currentHour = Math.round(state.x.value.value);
-  const currentData = data.find(item => item.hour === currentHour);
-  const currentLabel = currentData?.label || '';
-  
-  return (
-    <>
-      <Line 
-        points={points[yKey]} 
-        color={lineColor} 
-        strokeWidth={3} 
-        curveType="basis"
-      />
-      {isActive ? (
-        <ToolTip 
-          x={state.x.position} 
-          y={state.y[yKey].position}
-          value={state.y[yKey].value}
-          font={font}
-          chartWidth={Dimensions.get('window').width}
-          chartHeight={height}
-          label={currentLabel}
-        />
-      ) : null}
-    </>
-  );
-}}
+          return (
+            <>
+              <Line 
+                points={points[yKey]} 
+                color={lineColor} 
+                strokeWidth={3} 
+                curveType="basis"
+              />
+              {isActive ? (
+                <ToolTip 
+                  x={state.x.position} 
+                  y={state.y[yKey].position}
+                  value={state.y[yKey].value}
+                  font={font}
+                  chartWidth={Dimensions.get('window').width}
+                  chartHeight={height}
+                  label={labelValue}
+                />
+              ) : null}
+            </>
+          );
+        }}
       </CartesianChart>
     </View>
   );

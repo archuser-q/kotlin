@@ -4,7 +4,7 @@ import { SharedValue, useDerivedValue } from "react-native-reanimated";
 export default function ToolTip(
   { x, y, value, font, chartWidth, chartHeight, label }: 
   { x: SharedValue<number>; y: SharedValue<number>, value: SharedValue<number>, 
-    font:any, chartWidth: number, chartHeight: number, label: string}) {
+    font:any, chartWidth: number, chartHeight: number, label: SharedValue<string>}) {
   
   const text = useDerivedValue(()=>{
     return `${value.value.toFixed(1)}`;
