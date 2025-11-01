@@ -1,11 +1,10 @@
+import { WeatherCard } from "@/component/weatherCard";
 import { useCardStore } from "@/store/cityCardStore";
-import { getAirQuality, getWeather } from "@/utils/axios";
-import getWeatherGif from "@/utils/getWeatherGif";
 import Ionicons from "@expo/vector-icons/build/Ionicons";
 import { useRouter } from "expo-router";
 import { Trash2 } from "lucide-react-native";
 import React, { useEffect } from "react";
-import { ImageBackground, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { Swipeable } from 'react-native-gesture-handler';
 
 export default function Index() {
@@ -51,38 +50,21 @@ export default function Index() {
               <TouchableOpacity
                 key={index}
                 onPress={async () => {
-                    const weatherData = await getWeather(card.latitude, card.longitude);
-                    const airQualityData = await getAirQuality(card.latitude, card.longitude);
-                    
-                    if (weatherData && airQualityData) {
-                        router.push({
-                            pathname: '/fullLocationInfo',
-                            params: {
-                                cityName: card.cityName,
-                                latitude: card.latitude, 
-                                longitude: card.longitude,
-                                weatherData: JSON.stringify(weatherData),
-                                airQualityData: JSON.stringify(airQualityData),
-                            }
-                        });
-                    }
+                  router.push({
+                      pathname: '/fullLocationInfo',
+                      params: {
+                          cityName: card.cityName,
+                          latitude: card.latitude, 
+                          longitude: card.longitude,
+                      }
+                  });
                 }}
               >
-                <ImageBackground
-                    key={index}
-                    source={getWeatherGif(card.weatherParams)}
-                    resizeMode="cover"
-                    className="bg-gray-300 flex-row justify-between py-4 rounded-3xl overflow-hidden"
-                >
-                    <View className="flex-start pl-3 pt-1">
-                        <Text className="text-2xl font-semibold text-white">{card.cityName}</Text>
-                        <Text className="text-xl text-white">{card.description}</Text>
-                    </View>
-                    <View className="flex-end pr-3">
-                        <Text className="text-5xl text-white">{card.currentTemp}°C</Text>
-                        <Text className="text-white">{card.maxTemp}°C /{card.minTemp}°C</Text>
-                    </View>
-                </ImageBackground>
+                <WeatherCard
+                  cityName={card.cityName}
+                  latitude={card.latitude}
+                  longitude={card.longitude} 
+                />
               </TouchableOpacity>
             </Swipeable>
           ))}

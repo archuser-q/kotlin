@@ -4,53 +4,27 @@ import { create } from 'zustand';
 const CARDS_STORAGE_KEY = '@saved_cards';
 
 interface CardState {
-  cityName: string;
-  description: string;
-  currentTemp: number;
-  maxTemp: number;
-  minTemp: number;
-  latitude: number;  
-  longitude: number;
   cards: Array<{
     cityName: string;
-    description: string;
-    currentTemp: number;
-    maxTemp: number;
-    minTemp: number;
-    weatherParams: {
-      isDay: number;
-      weathercode: number;
-    };
+    longitude: number;
+    latitude: number;
   }>;
   addCard: (
-    cityName: string, 
-    description: string, 
-    currentTemp: number, 
-    maxTemp: number, 
-    minTemp: number, 
-    latitude: number, 
-    longitude: number, 
-    weatherParams: {
-      isDay: number;
-      weathercode: number;
-    }) => Promise<void>;
+    cityName: string,
+    longitude: number,
+    latitude: number
+  ) => Promise<void>;
   loadCards: () => Promise<void>;
   removeCards: (index: number) => Promise<void>
 }
 
 export const useCardStore = create<CardState>((set, get) => ({
-  cityName: '',
-  description: '',
-  currentTemp: 0,
-  maxTemp: 0,
-  minTemp: 0,
-  longitude: 0,
-  latitude: 0,
   cards: [],
-  addCard: async (cityName, description, currentTemp, maxTemp, minTemp, longitude, latitude, weatherParams) => {
-    const newCard = {
-      cityName, description, currentTemp, maxTemp, minTemp, longitude, latitude, weatherParams
-    };
+  addCard: async (cityName, longitude, latitude) => {
+    const exist = get().cards.some(
+      card => card.cityName === cityName && card.latitude === latitude && card.longitude === longitude
+    );
+    const newCard = {cityName, longitude, latitude};
     const updatedCards = [...get().cards,newCard];
     set({cards: updatedCards});
 

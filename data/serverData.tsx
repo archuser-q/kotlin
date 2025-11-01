@@ -1,10 +1,17 @@
+import { useAirQualityQuery, useWeatherQuery } from "@/utils/axios";
 import { useLocalSearchParams } from "expo-router";
 
 export const useData = () => {
-  const { cityName, weatherData, airQualityData, latitude, longtitude } = useLocalSearchParams();
-  const weather = JSON.parse(weatherData as string);
-  const airQuality = JSON.parse(airQualityData as string);
+  const params = useLocalSearchParams();
+  const cityName = params.cityName as string;
+  const latitude = parseFloat(params.latitude as string);
+  const longitude = parseFloat(params.longitude as string);
+
+  const {data: weather} = useWeatherQuery(latitude, longitude);
+  const {data: airQuality} = useAirQualityQuery(latitude, longitude);
+
   const windDirectionPercent = (weather.current.wind_direction_10m / 360) * 100;
+
   const now = new Date();
   const currentHour = now.getHours();
 
@@ -24,5 +31,13 @@ export const useData = () => {
         .slice(0, 12)
     : [];
 
-  return { cityName, weather, airQuality, windDirectionPercent, data, latitude: weather.latitude,longitude: weather.longitude };
+  return { 
+    cityName,
+    latitude,
+    longitude, 
+    weather, 
+    airQuality, 
+    windDirectionPercent, 
+    data 
+  };
 };

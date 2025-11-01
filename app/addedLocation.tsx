@@ -1,6 +1,5 @@
 import { cities, DataType } from "@/data/locationData";
 import { useLocationStore } from "@/store/locationStore";
-import { getAirQuality, getWeather } from "@/utils/axios";
 import Ionicons from "@expo/vector-icons/build/Ionicons";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Location from 'expo-location';
@@ -40,6 +39,9 @@ export default function AddedLocation() {
   const loadSearchHistory = async () => {
     try{
       const history = await AsyncStorage.getItem(SEARCH_HISTORY_KEY);
+      if(history){
+        setSearchHistory(JSON.parse(history));
+      }
     } catch(error){
       console.error();
     }
@@ -103,20 +105,16 @@ export default function AddedLocation() {
               key={index}
               className="flex-row justify-between items-center py-3 border-gray-200"
               onPress={async()=>{
-                const weatherData = await getWeather(city.latitude, city.longitude);
-                const airQualityData = await getAirQuality(city.latitude, city.longitude);
-                if (weatherData){
-                  setSavedLocation(city.name, city.latitude, city.longitude);
-                  await saveToHistory(city.name);
-                  router.push({
-                    pathname: '/fullLocationInfo',
-                    params: {
-                      cityName: city.name,
-                      weatherData: JSON.stringify(weatherData),
-                      airQualityData: JSON.stringify(airQualityData),
-                    }
-                  })
-                }
+                setSavedLocation(city.name, city.latitude, city.longitude);
+                await saveToHistory(city.name);
+                router.push({
+                  pathname: '/fullLocationInfo',
+                  params: {
+                    cityName: city.name,
+                    latitude: city.latitude,
+                    longitude: city.longitude,
+                  }
+                })
               }}
             >
               <View>
@@ -146,9 +144,6 @@ export default function AddedLocation() {
 
                 setSavedLocation(region, latitude, longitude);
 
-                const weatherData = await getWeather(latitude, longitude);
-                const airQualityData = await getAirQuality(latitude, longitude);
-
                 router.push({
                   pathname: "/fullLocationInfo",
                   params: {
@@ -156,8 +151,6 @@ export default function AddedLocation() {
                     region,
                     latitude: String(latitude),
                     longitude: String(longitude),
-                    weatherData: JSON.stringify(weatherData),
-                    airQualityData: JSON.stringify(airQualityData)
                   },
                 });
               }}
@@ -198,18 +191,14 @@ export default function AddedLocation() {
                       className="bg-gray-100 py-3 px-5 rounded-xl"
                       onPress={async () => {
                         setSavedLocation(city.name, city.latitude, city.longitude);
-                        const weatherData = await getWeather(city.latitude, city.longitude);
-                        const airQualityData = await getAirQuality(city.latitude, city.longitude);
-                        if (weatherData) {
-                          router.push({
-                            pathname: '/fullLocationInfo',
-                            params: {
-                              cityName: city.name,
-                              weatherData: JSON.stringify(weatherData),
-                              airQualityData: JSON.stringify(airQualityData)
-                            }
-                          });
-                        }
+                        router.push({
+                          pathname: '/fullLocationInfo',
+                          params: {
+                            cityName: city.name,
+                            latitude: city.latitude,
+                            longitude: city.longitude,
+                          }
+                        });
                     }}>
                       <Text className="text-center">{city.name}</Text>
                     </TouchableOpacity>

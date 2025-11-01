@@ -1,6 +1,7 @@
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-export async function getWeather(latitude: number, longitude: number) {
+async function getWeather(latitude: number, longitude: number) {
   try {
     const response = await axios.get('https://api.open-meteo.com/v1/forecast', {
       params: {
@@ -19,7 +20,7 @@ export async function getWeather(latitude: number, longitude: number) {
   }
 }
 
-export async function getAirQuality(latitude: number, longitude: number) {
+async function getAirQuality(latitude: number, longitude: number) {
   try {
     const response = await axios.get('https://air-quality-api.open-meteo.com/v1/air-quality', {
       params: {
@@ -34,4 +35,20 @@ export async function getAirQuality(latitude: number, longitude: number) {
     console.error('Lỗi khi gọi Air Quality API:', error.message);
     return null;
   }
+}
+
+export function useWeatherQuery(latitude: number, longitude: number){
+  return useQuery({
+    queryKey: ['weatherData', latitude,longitude],
+    queryFn: () => getWeather(latitude,longitude),
+    enabled: !!(latitude && longitude)
+  })
+}
+
+export function useAirQualityQuery(latitude:number, longitude:number){
+  return useQuery({
+    queryKey: ['airQuality',latitude,longitude],
+    queryFn: () => getAirQuality(latitude,longitude),
+    enabled: !! (latitude&&longitude)
+  })
 }

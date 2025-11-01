@@ -2,28 +2,36 @@ import CircularProgressBar from "@/component/CircularProgressBar";
 import DashCircularProgressBar from "@/component/DashCircularProgressBar";
 import RGBCircularProgressBar from "@/component/RGBCIrcularProgressBar";
 import { Wave } from "@/component/wave";
-import { useData } from "@/data/serverData";
 import { useCardStore } from "@/store/cityCardStore";
+import { useAirQualityQuery, useWeatherQuery } from "@/utils/axios";
 import getUVLevel from "@/utils/getUVLevel";
 import getWeatherDescription from "@/utils/getWeatherDescription";
 import getWeatherGif from "@/utils/getWeatherGif";
 import getWindDirection from "@/utils/getWindDirection";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { Droplet, EllipsisVertical, Plus, Sun, Thermometer } from 'lucide-react-native';
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ImageBackground, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 export default function fullLocationInfo(){
-    const { cityName, weather, airQuality, windDirectionPercent, data, latitude, longitude } = useData();
-    const router = useRouter();
-    const { addCard, removeCards, cards} = useCardStore();
-    const gifSource = getWeatherGif({
-                isDay: weather.current.is_day,
-                weathercode: weather.current.weathercode,
-            });
+    const params = useLocalSearchParams();
+    const cityName = params.cityName as string;
+    const latitude = parseFloat(params.latitude as string);
+    const longitude = parseFloat(params.longitude as string);
+    
+    const { data: weather } = useWeatherQuery(latitude, longitude);
+    const { data: airQuality } = useAirQualityQuery(latitude, longitude);
 
     const [isCardExist, setIsCardExist] = useState(false);
     const [existingCardIndex, setExistingCardIndex] = useState(-1);
+
+    const windDirectionPercent = useMemo(() => 
+        weather ? (weather.current.wind_direction_10m / 360) * 100 : 0,
+        [weather]
+    );
+
+    const router = useRouter();
+    const { addCard, removeCards, cards} = useCardStore();
 
     useEffect(() => {
         const index = cards.findIndex(
@@ -35,7 +43,37 @@ export default function fullLocationInfo(){
         setExistingCardIndex(index);
     }, [cards, cityName, latitude, longitude]);
 
+    const data = useMemo(() => {
+        if (!weather?.hourly?.time) return [];
+        
+        const now = new Date();
+        const currentHour = now.getHours();
+        
+        return weather.hourly.time
+            .map((time: string, index: number) => {
+                const hour = new Date(time).getHours();
+                const isToday = new Date(time).getDate() === now.getDate();
+                const isCurrentHour = isToday && hour === currentHour;
+                return {
+                    time: isCurrentHour ? 'Current' : `${hour}h`,
+                    temp: Math.round(weather.hourly.temperature_2m[index]),
+                    timestamp: new Date(time).getTime()
+                };
+            })
+            .filter(item => item.timestamp >= now.getTime())
+            .slice(0, 12);
+    }, [weather]);
 
+    if (!weather || !airQuality) {
+        return (
+            <View className="">
+            </View>
+        );
+    }
+    const gifSource = getWeatherGif({
+                isDay: weather.current.is_day,
+                weathercode: weather.current.weathercode,
+            });
     return(
         <ImageBackground
             source={gifSource}
@@ -54,16 +92,8 @@ export default function fullLocationInfo(){
                                 onPress={async() => {
                                     await addCard( 
                                         cityName,
-                                        getWeatherDescription(weather.current.weathercode),
-                                        Math.round(weather.current.temperature_2m),
-                                        Math.round(weather.daily.temperature_2m_max[0]),
-                                        Math.round(weather.daily.temperature_2m_min[0]),
                                         longitude,
                                         latitude,
-                                        {
-                                            isDay: weather.current.is_day,
-                                            weathercode: weather.current.weathercode,
-                                        }  
                                     );
                                     router.push("/");
                                 }}
