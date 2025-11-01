@@ -7,9 +7,10 @@ import { useAirQualityQuery, useWeatherQuery } from "@/utils/axios";
 import getUVLevel from "@/utils/getUVLevel";
 import getWeatherDescription from "@/utils/getWeatherDescription";
 import getWeatherGif from "@/utils/getWeatherGif";
+import { WeatherIcon } from "@/utils/getWeatherIcon";
 import getWindDirection from "@/utils/getWindDirection";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { Droplet, EllipsisVertical, Plus, Sun, Thermometer } from 'lucide-react-native';
+import { Droplet, EllipsisVertical, Plus, Thermometer } from 'lucide-react-native';
 import { useEffect, useMemo, useState } from "react";
 import { ImageBackground, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
@@ -43,7 +44,7 @@ export default function fullLocationInfo(){
         setExistingCardIndex(index);
     }, [cards, cityName, latitude, longitude]);
 
-    const data = useMemo(() => {
+    const dataHourly = useMemo(() => {
         if (!weather?.hourly?.time) return [];
         
         const now = new Date();
@@ -57,7 +58,32 @@ export default function fullLocationInfo(){
                 return {
                     time: isCurrentHour ? 'Current' : `${hour}h`,
                     temp: Math.round(weather.hourly.temperature_2m[index]),
+                    weathercode: weather.hourly.weathercode[index],
                     timestamp: new Date(time).getTime()
+                };
+            })
+            .filter(item => item.timestamp >= now.getTime())
+            .slice(0, 12);
+    }, [weather]);
+
+    const dataDaily = useMemo(() => {
+        if (!weather?.daily?.time) return [];
+
+        const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        
+        const now = new Date();
+        const currentHour = now.getHours();
+        
+        return weather.daily.time
+            .map((date: string, index: number) => {
+                const d = new Date(date);
+                const weekday = weekdays[d.getDay()];
+                return {
+                    time: weekday,
+                    min: Math.round(weather.daily.temperature_2m_min[index]),
+                    max: Math.round(weather.daily.temperature_2m_max[index]),
+                    weathercode: weather.daily.weathercode[index],
+                    timestamp: d.getTime(),
                 };
             })
             .filter(item => item.timestamp >= now.getTime())
@@ -127,19 +153,42 @@ export default function fullLocationInfo(){
                     <View
                         className="bg-black/40 rounded-3xl p-5"
                     >
+                        <Text className="text-xl font-medium mb-4 text-white">7-days Forecast</Text>
+                        <ScrollView
+                            showsHorizontalScrollIndicator={false}
+                        >
+                            {dataDaily.map((item,index)=>(
+                                <View
+                                    key={index}
+                                    className="items-center justify-between p-3 gap-10 flex-row"
+                                >
+                                    <Text className="font-2xl text-white w-12">{item.time}</Text>
+                                    <View>
+                                        <WeatherIcon weathercode={item.weathercode}/>
+                                    </View>
+                                    <Text className="font-2xl text-center text-white">{item.max}° / {item.min}°</Text>
+                                </View>
+                            ))}
+                        </ScrollView>
+                    </View>
+                </View>
+                <View className="mt-8 px-4">
+                    <View
+                        className="bg-black/40 rounded-3xl p-5"
+                    >
                         <Text className="text-xl font-medium mb-5 ml-2 text-white">Hourly Forecast</Text>
                         <ScrollView
                             horizontal
                             showsHorizontalScrollIndicator={false}
                             className="flex-row"
                         >
-                            {data.map((item,index)=>(
+                            {dataHourly.map((item,index)=>(
                                 <View
                                     key={index}
                                     className="items-center justify-center mr-10 gap-3"
                                 >
                                     <Text className="font-2xl text-white">{item.time}</Text>
-                                    <Sun size={45} color="white" fill="white" />
+                                    <WeatherIcon weathercode={item.weathercode}/>
                                     <Text className="font-2xl text-center text-white">{item.temp}°</Text>
                                 </View>
                             ))}
