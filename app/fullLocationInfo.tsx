@@ -4,7 +4,6 @@ import RGBCircularProgressBar from "@/component/RGBCIrcularProgressBar";
 import { Wave } from "@/component/wave";
 import { useData } from "@/data/serverData";
 import { useCardStore } from "@/store/cityCardStore";
-import { useLocationStore } from "@/store/locationStore";
 import getUVLevel from "@/utils/getUVLevel";
 import getWeatherDescription from "@/utils/getWeatherDescription";
 import getWeatherGif from "@/utils/getWeatherGif";
@@ -15,10 +14,9 @@ import { useEffect, useState } from "react";
 import { ImageBackground, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 export default function fullLocationInfo(){
-    const { cityName, weather, airQuality, windDirectionPercent, data } = useData();
+    const { cityName, weather, airQuality, windDirectionPercent, data, latitude, longitude } = useData();
     const router = useRouter();
     const { addCard, removeCards, cards} = useCardStore();
-    const { latitude, longitude } = useLocationStore();
     const gifSource = getWeatherGif({
                 isDay: weather.current.is_day,
                 weathercode: weather.current.weathercode,

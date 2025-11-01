@@ -59,6 +59,8 @@ export default function Index() {
                             pathname: '/fullLocationInfo',
                             params: {
                                 cityName: card.cityName,
+                                latitude: card.latitude, 
+                                longitude: card.longitude,
                                 weatherData: JSON.stringify(weatherData),
                                 airQualityData: JSON.stringify(airQualityData),
                             }

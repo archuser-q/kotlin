@@ -1,7 +1,7 @@
 import { useLocalSearchParams } from "expo-router";
 
 export const useData = () => {
-  const { cityName, weatherData, airQualityData } = useLocalSearchParams();
+  const { cityName, weatherData, airQualityData, latitude, longtitude } = useLocalSearchParams();
   const weather = JSON.parse(weatherData as string);
   const airQuality = JSON.parse(airQualityData as string);
   const windDirectionPercent = (weather.current.wind_direction_10m / 360) * 100;
@@ -24,5 +24,5 @@ export const useData = () => {
         .slice(0, 12)
     : [];
 
-  return { cityName, weather, airQuality, windDirectionPercent, data };
+  return { cityName, weather, airQuality, windDirectionPercent, data, latitude: weather.latitude,longitude: weather.longitude };
 };
