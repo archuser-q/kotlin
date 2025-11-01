@@ -254,9 +254,8 @@ export default function fullLocationInfo(){
                         </View>
                     </View>
 
-                    <TouchableOpacity 
+                    <View 
                         className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row items-center pr-5"
-                        onPress={() => openModal('Rainfall', 'rainfall')}
                     >
                         <View className="pb-20 flex-1">
                             <Text className="text-white">Rainfall</Text>
@@ -265,7 +264,7 @@ export default function fullLocationInfo(){
                         <View className="pt-10">
                             <Wave size={67} value={Math.min((weather.daily.showers_sum[0] / 50) * 100, 100)}/>
                         </View>
-                    </TouchableOpacity>
+                    </View>
                     <TouchableOpacity 
                         className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row items-center pr-5"
                         onPress={() => openModal('Real Feel', 'realfeel')}
