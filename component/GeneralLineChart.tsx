@@ -1,69 +1,39 @@
-import React from "react";
-import { Dimensions, View } from "react-native";
-import { LineChart } from "react-native-chart-kit";
-
-const screenWidth = Dimensions.get("window").width;
+import { useFont } from "@shopify/react-native-skia";
+import { View } from "react-native";
+import { CartesianChart, Line, useChartPressState } from "victory-native";
+import roboto from '../assets/fonts/Roboto-Regular.ttf';
+import ToolTip from "./lineComponent/customToolTip";
 
 export default function GeneralLineChart() {
-  const data = {
-    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-    datasets: [
-      {
-        data: [21, 23, 22, 25, 30, 28],
-        strokeWidth: 2,
-      },
-    ],
-  };
-  const data2 = {
-    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-    datasets: [
-      {
-        data: [12, 13, 8, 20, 24, 22],
-        strokeWidth: 2,
-      },
-    ],
-  };
-
-  const chartConfig = {
-    backgroundGradientFrom: "transparent",
-    backgroundGradientTo: "transparent",
-    decimalPlaces: 0,
-    color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-    labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-    propsForDots: {
-      r: "5",
-      strokeWidth: "1",
-      stroke: "#FFD700",
-    },
-  };
-
+  const font = useFont(roboto,12);
+  const DATA = Array.from({ length: 31 }, (_, i) => ({
+    day: i,
+    highTmp: 40 + 30 * Math.random(),
+  }));
+  const { state, isActive } = useChartPressState({ x: 0, y: { highTmp: 0 } });
   return (
-    <View className="relative">
-      <LineChart
-        data={data}
-        width={screenWidth}
-        height={180}
-        chartConfig={chartConfig}
-        bezier
-        withInnerLines={false}
-        withOuterLines={false}
-        withHorizontalLabels={false}
-        withVerticalLabels={false}
-        withShadow={false}
-        transparent={true}
-      />
-      <LineChart
-        data={data2}
-        width={screenWidth}
-        height={180}
-        chartConfig={chartConfig}
-        bezier
-        withInnerLines={false}
-        withOuterLines={false}
-        withHorizontalLabels={false}
-        withShadow={false}
-        transparent={true}
-      />
+    <View style={{ height: 300 }}>
+      <CartesianChart 
+        data={DATA} 
+        xKey="day" 
+        yKeys={["highTmp"]}
+        axisOptions={{ font }}
+        chartPressState={state}
+      >
+        {({ points }) => (
+          <>
+            <Line points={points.highTmp} color="red" strokeWidth={3} curveType="basis"/>
+            {isActive ? (
+              <ToolTip 
+                x={state.x.position} 
+                y={state.y.highTmp.position}
+                value={state.y.highTmp.value}
+                font={font}
+              />
+            ) : null}
+          </>
+        )}
+      </CartesianChart>
     </View>
   );
 }

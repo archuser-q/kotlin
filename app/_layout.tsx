@@ -24,6 +24,7 @@ export default function RootLayout() {
         >
           <Stack.Screen name="index"/>
           <Stack.Screen name="addedLocation"/>
+          <Stack.Screen name="testLayout"/>
         </Stack>
       </GestureHandlerRootView>
     </QueryClientProvider>
