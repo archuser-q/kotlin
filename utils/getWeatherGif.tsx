@@ -4,7 +4,8 @@ type WeatherGifProps = {
   weather: {
     daily:{
       sunrise: [],
-      sunset: []
+      sunset: [],
+      showers_sum: []
     }
   }
 };
@@ -12,15 +13,21 @@ type WeatherGifProps = {
 export default function getWeatherGif({ isDay, weathercode, weather }: WeatherGifProps) {
   const currentHour = new Date().getHours();
 
-  if (weather?.daily){
+  if (weather?.daily) {
+    const now = new Date();
     const isNearSunrise = Math.abs(currentHour - new Date(weather.daily.sunrise[0])) < 30 * 60 * 1000;
     const isNearSunset = Math.abs(currentHour - new Date(weather.daily.sunset[0])) < 30 * 60 * 1000;
-
+    const isRaining = weather.daily.showers_sum && weather.daily.showers_sum[0] > 0;
+    
     if (isDay && isNearSunrise) {
-      return require('../assets/sunrise.gif');
+      return isRaining 
+        ? require('../assets/sunriseRain.gif')
+        : require('../assets/sunrise.gif');
     }
     if (isDay && isNearSunset) {
-      return require('../assets/sunset.gif');
+      return isRaining
+        ? require('../assets/sunsetRain.gif') 
+        : require('../assets/sunset.gif');
     }
   }
 
