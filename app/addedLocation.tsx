@@ -13,7 +13,7 @@ const SEARCH_HISTORY_KEY = '@search_history';
 export default function AddedLocation() {
   const [query, setQuery] = useState("");
   const [filteredCities, setFilteredCities] = useState<DataType[]>([]);
-  const [searchHistory, setSearchHistory] = useState<string[]>([]);
+  const [searchHistory, setSearchHistory] = useState<DataType[]>([]);
   const [location, setLocation] = useState<LocationObject | null>(null);
   const {setSavedLocation} = useLocationStore();
   const router = useRouter();
@@ -47,9 +47,9 @@ export default function AddedLocation() {
     }
   };
 
-  const saveToHistory = async (cityName: string) => {
+  const saveToHistory = async (cityData: DataType) => {
     try {
-      const newHistory = [cityName, ...searchHistory.filter(c => c !== cityName)].slice(0, 10);
+      const newHistory = [cityData, ...searchHistory.filter(c => c.name !== cityData.name)].slice(0, 10);
       await AsyncStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(newHistory));
       setSearchHistory(newHistory);
     } catch (error) {
@@ -106,7 +106,7 @@ export default function AddedLocation() {
               className="flex-row justify-between items-center py-3 border-gray-200"
               onPress={async()=>{
                 setSavedLocation(city.name, city.latitude, city.longitude);
-                await saveToHistory(city.name);
+                await saveToHistory(city);
                 router.push({
                   pathname: '/fullLocationInfo',
                   params: {
@@ -172,8 +172,22 @@ export default function AddedLocation() {
               </View>
               <View className="flex-row flex-wrap gap-3">
                 {searchHistory.map((city, i) => (
-                  <TouchableOpacity key={i} className="bg-gray-100 py-3 px-5 rounded-xl">
-                    <Text className="text-center">{city}</Text>
+                  <TouchableOpacity 
+                    key={i} 
+                    className="bg-gray-100 py-3 px-5 rounded-xl"
+                    onPress={async () => {
+                        setSavedLocation(city.name, city.latitude, city.longitude);
+                        router.push({
+                          pathname: '/fullLocationInfo',
+                          params: {
+                            cityName: city.name,
+                            latitude: city.latitude,
+                            longitude: city.longitude,
+                          }
+                        });
+                    }}
+                  >
+                    <Text className="text-center">{city.name}</Text>
                   </TouchableOpacity>
                 ))}
               </View>
@@ -199,7 +213,8 @@ export default function AddedLocation() {
                             longitude: city.longitude,
                           }
                         });
-                    }}>
+                      }}
+                    >
                       <Text className="text-center">{city.name}</Text>
                     </TouchableOpacity>
                   )
