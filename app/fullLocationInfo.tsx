@@ -110,6 +110,7 @@ export default function fullLocationInfo(){
     const gifSource = getWeatherGif({
                 isDay: weather.current.is_day,
                 weathercode: weather.current.weathercode,
+                weather: weather
             });
     return(
         <ImageBackground

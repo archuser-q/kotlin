@@ -1,16 +1,27 @@
 type WeatherGifProps = {
   isDay: number;
   weathercode: number; 
+  weather: {
+    daily:{
+      sunrise: [],
+      sunset: []
+    }
+  }
 };
 
-export default function getWeatherGif({ isDay, weathercode }: WeatherGifProps) {
+export default function getWeatherGif({ isDay, weathercode, weather }: WeatherGifProps) {
   const currentHour = new Date().getHours();
 
-  if (isDay && currentHour >= 5 && currentHour <= 6) {
-    return require('../assets/sunrise.gif');
-  }
-  if (isDay && currentHour >= 17 && currentHour <= 18) {
-    return require('../assets/sunset.gif');
+  if (weather?.daily){
+    const isNearSunrise = Math.abs(currentHour - new Date(weather.daily.sunrise[0])) < 30 * 60 * 1000;
+    const isNearSunset = Math.abs(currentHour - new Date(weather.daily.sunset[0])) < 30 * 60 * 1000;
+
+    if (isDay && isNearSunrise) {
+      return require('../assets/sunrise.gif');
+    }
+    if (isDay && isNearSunset) {
+      return require('../assets/sunset.gif');
+    }
   }
 
   if ([95, 96, 99].includes(weathercode)) {
