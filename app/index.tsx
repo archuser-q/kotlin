@@ -47,7 +47,7 @@ export default function Index() {
       </View>
       <View className="pt-5 px-7 gap-4 pb-16">
           {cards.map((card, index) => (
-            <Swipeable renderRightActions={() => renderRightActions(index)}>
+            <Swipeable key={index} renderRightActions={() => renderRightActions(index)}>
               <TouchableOpacity
                 key={index}
                 onPress={async () => {

@@ -6,10 +6,10 @@ type WeatherGifProps = {
 export default function getWeatherGif({ isDay, weathercode }: WeatherGifProps) {
   const currentHour = new Date().getHours();
 
-  if (isDay && currentHour >= 5 && currentHour <= 7) {
+  if (isDay && currentHour >= 5 && currentHour <= 6) {
     return require('../assets/sunrise.gif');
   }
-  if (isDay && currentHour >= 17 && currentHour <= 19) {
+  if (isDay && currentHour >= 17 && currentHour <= 18) {
     return require('../assets/sunset.gif');
   }
 
