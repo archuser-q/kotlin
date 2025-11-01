@@ -163,6 +163,30 @@ export default function fullLocationInfo(){
                     <View
                         className="bg-black/40 rounded-3xl p-5"
                     >
+                        <Text className="font-medium mb-5 text-white">Rainy and humid day, please careful when going out</Text>
+                        <View className="h-[1px] bg-gray-300 mb-5" />
+                        <ScrollView
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            className="flex-row"
+                        >
+                            {dataHourly.map((item,index)=>(
+                                <View
+                                    key={index}
+                                    className="items-center justify-center mr-10 gap-3"
+                                >
+                                    <Text className="font-2xl text-white">{item.time}</Text>
+                                    <WeatherIcon weathercode={item.weathercode}/>
+                                    <Text className="font-2xl text-center text-white">{item.temp}°</Text>
+                                </View>
+                            ))}
+                        </ScrollView>
+                    </View>
+                </View>
+                <View className="mt-8 px-4">
+                    <View
+                        className="bg-black/40 rounded-3xl p-5"
+                    >
                         <Text className="text-xl font-medium mb-4 text-white">7-days Forecast</Text>
                         <ScrollView
                             showsHorizontalScrollIndicator={false}
@@ -177,29 +201,6 @@ export default function fullLocationInfo(){
                                         <WeatherIcon weathercode={item.weathercode}/>
                                     </View>
                                     <Text className="font-2xl text-center text-white">{item.max}° / {item.min}°</Text>
-                                </View>
-                            ))}
-                        </ScrollView>
-                    </View>
-                </View>
-                <View className="mt-8 px-4">
-                    <View
-                        className="bg-black/40 rounded-3xl p-5"
-                    >
-                        <Text className="text-xl font-medium mb-5 ml-2 text-white">Hourly Forecast</Text>
-                        <ScrollView
-                            horizontal
-                            showsHorizontalScrollIndicator={false}
-                            className="flex-row"
-                        >
-                            {dataHourly.map((item,index)=>(
-                                <View
-                                    key={index}
-                                    className="items-center justify-center mr-10 gap-3"
-                                >
-                                    <Text className="font-2xl text-white">{item.time}</Text>
-                                    <WeatherIcon weathercode={item.weathercode}/>
-                                    <Text className="font-2xl text-center text-white">{item.temp}°</Text>
                                 </View>
                             ))}
                         </ScrollView>
