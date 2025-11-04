@@ -25,12 +25,6 @@ export default function Index() {
   },[])
   return (
     <ScrollView className="bg-white">
-      <TouchableOpacity>
-        <Text 
-          className="pt-20"
-          onPress={()=>router.push('/windMap')}
-        >Hello</Text>
-      </TouchableOpacity>
       <Text className="text-4xl pl-7 pb-3 leading-relaxed  pt-20">Managing cities</Text>
       <View className="flex-row items-center bg-gray-100 rounded-3xl mx-4 px-4">
         <Ionicons name="search-outline" size={20} color="#9ca3af" />
