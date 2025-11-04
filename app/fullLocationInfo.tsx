@@ -163,7 +163,7 @@ export default function fullLocationInfo(){
                     <Text className="text-9xl text-white">{temperatureConverted(weather.current.temperature_2m, tempUnit)}°</Text>
                     <Text className="text-xl text-white">{getWeatherDescription(weather.current.weathercode)} {temperatureConverted(weather.daily.temperature_2m_max[0], tempUnit)}°/{temperatureConverted(weather.daily.temperature_2m_min[0],tempUnit)}°</Text>
                 </View>
-                <View className="mt-8 px-4">
+                <View className="mt-8 px-2">
                     <View
                         className="bg-black/40 rounded-3xl p-5"
                     >
@@ -200,14 +200,14 @@ export default function fullLocationInfo(){
                         })
                     }    
                 >
-                    <View className="mt-5 px-4">
+                    <View className="mt-5 px-2">
                         <View className="bg-black/40 rounded-3xl p-5">
                             <Text className="text-xl font-medium mb-4 text-white">Wind Map</Text>
                             <WindMapCard latitude={latitude} longitude={longitude}/>
                         </View>
                     </View>
                 </TouchableOpacity>
-                <View className="mt-5 px-4">
+                <View className="mt-5 px-2">
                     <View
                         className="bg-black/40 rounded-3xl p-5"
                     >
@@ -222,7 +222,7 @@ export default function fullLocationInfo(){
                                 >
                                     <Text className="font-2xl text-white w-12">{item.time}</Text>
                                     <View>
-                                        <WeatherIcon weathercode={temperatureConverted(item.weathercode, tempUnit)}/>
+                                        <WeatherIcon weathercode={item.weathercode}/>
                                     </View>
                                     <Text className="font-2xl text-center text-white">{temperatureConverted(item.max,tempUnit)}° / {temperatureConverted(item.min,tempUnit)}°</Text>
                                 </View>
@@ -230,7 +230,7 @@ export default function fullLocationInfo(){
                         </ScrollView>
                     </View>
                 </View>
-                <View className="flex-row flex-wrap justify-between px-4 pt-5 pb-10">
+                <View className="flex-row flex-wrap justify-between px-2 pt-5 pb-10">
                     <TouchableOpacity 
                         className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5"
                         onPress={() => openModal('UV Index', 'uv')}
@@ -284,7 +284,7 @@ export default function fullLocationInfo(){
                     >
                         <View className="pb-20 flex-1">
                             <Text className="text-white">Rainfall</Text>
-                            <Text className="text-2xl font-medium text-white">{weather.daily.showers_sum[0]}mm</Text>
+                            <Text className="text-xl font-medium text-white">{weather.daily.showers_sum[0]} mm</Text>
                         </View>
                         <View className="pt-10">
                             <Wave size={67} value={Math.min((weather.daily.showers_sum[0] / 50) * 100, 100)}/>
