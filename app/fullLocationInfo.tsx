@@ -3,27 +3,21 @@ import DashCircularProgressBar from "@/component/DashCircularProgressBar";
 import Modal from "@/component/Modal";
 import RGBCircularProgressBar from "@/component/RGBCIrcularProgressBar";
 import { Wave } from "@/component/wave";
+import { useData } from "@/data/serverData";
 import { useCardStore } from "@/store/cityCardStore";
-import { useAirQualityQuery, useWeatherQuery } from "@/utils/axios";
 import getUVLevel from "@/utils/getUVLevel";
 import getWeatherDescription from "@/utils/getWeatherDescription";
 import getWeatherGif from "@/utils/getWeatherGif";
 import { WeatherIcon } from "@/utils/getWeatherIcon";
 import getWindDirection from "@/utils/getWindDirection";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import { Droplet, EllipsisVertical, Plus, Thermometer } from 'lucide-react-native';
 import { useEffect, useMemo, useState } from "react";
 import { ImageBackground, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import WindMapCard from "../component/windMap";
 
 export default function fullLocationInfo(){
-    const params = useLocalSearchParams();
-    const cityName = params.cityName as string;
-    const latitude = parseFloat(params.latitude as string);
-    const longitude = parseFloat(params.longitude as string);
-    
-    const { data: weather } = useWeatherQuery(latitude, longitude);
-    const { data: airQuality } = useAirQualityQuery(latitude, longitude);
+    const { cityName, latitude, longitude, weather, airQuality } = useData();
 
     const [isCardExist, setIsCardExist] = useState(false);
     const [existingCardIndex, setExistingCardIndex] = useState(-1);
@@ -151,7 +145,11 @@ export default function fullLocationInfo(){
                                 >
                                     <Plus color={'white'} size={30}/>
                                 </TouchableOpacity>
-                                <EllipsisVertical color={'white'} size={30}/>
+                                <TouchableOpacity
+                                    onPress={()=> router.push('/setting')}
+                                >
+                                    <EllipsisVertical color={'white'} size={30}/>
+                                </TouchableOpacity>
                             </View>
                         </>
                     )}
@@ -165,7 +163,13 @@ export default function fullLocationInfo(){
                     <View
                         className="bg-black/40 rounded-3xl p-5"
                     >
-                        <View className="h-[1px] bg-gray-300 mb-5" />
+                        {/*<AIWeatherAdvice 
+                            weather={weather}
+                            airQuality={airQuality}
+                            cityName={cityName}
+                        />*/}
+                        <View className="h-[1px] bg-gray-300 mb-5">
+                        </View>
                         <ScrollView
                             horizontal
                             showsHorizontalScrollIndicator={false}
