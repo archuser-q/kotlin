@@ -26,7 +26,7 @@ interface WeatherAdviceInput {
 export async function getWeatherAdvice(
   data: WeatherAdviceInput
 ): Promise<string> {
-  const systemPrompt = `You are a helpful weather advisor. Provide practical, concise advice in English. Keep response to 2-3 SHORT sentences. Be direct and actionable.`;
+  const systemPrompt = `You are a helpful weather advisor. Provide practical weather advice in English using 1 very short, direct sentence.`;
 
   const userPrompt = `Today's weather in ${data.cityName}: ${data.temperature}°C (feels like ${data.apparentTemperature}°C), humidity ${data.humidity}%, UV ${data.uvIndex}, rainfall ${data.rainfall}mm, AQI ${data.airQuality}. ${getWeatherDescription(data.weatherCode)}. What should I wear and what activities are suitable? Answer BRIEFLY in 2-3 sentences.`;
 

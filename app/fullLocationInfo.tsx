@@ -1,4 +1,3 @@
-import AIWeatherAdvice from "@/component/AIWeatherAdvice";
 import CircularProgressBar from "@/component/CircularProgressBar";
 import DashCircularProgressBar from "@/component/DashCircularProgressBar";
 import Modal from "@/component/Modal";
@@ -15,6 +14,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { Droplet, EllipsisVertical, Plus, Thermometer } from 'lucide-react-native';
 import { useEffect, useMemo, useState } from "react";
 import { ImageBackground, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import WindMapCard from "../component/windMap";
 
 export default function fullLocationInfo(){
     const params = useLocalSearchParams();
@@ -165,11 +165,6 @@ export default function fullLocationInfo(){
                     <View
                         className="bg-black/40 rounded-3xl p-5"
                     >
-                        <AIWeatherAdvice 
-                            weather={weather}
-                            airQuality={airQuality}
-                            cityName={cityName}
-                        />
                         <View className="h-[1px] bg-gray-300 mb-5" />
                         <ScrollView
                             horizontal
@@ -189,7 +184,22 @@ export default function fullLocationInfo(){
                         </ScrollView>
                     </View>
                 </View>
-                <View className="mt-8 px-4">
+                <TouchableOpacity
+                    onPress={() =>
+                        router.push({
+                        pathname: '/windMapFullScreen',
+                        params: { latitude, longitude },
+                        })
+                    }    
+                >
+                    <View className="mt-5 px-4">
+                        <View className="bg-black/40 rounded-3xl p-5">
+                            <Text className="text-xl font-medium mb-4 text-white">Wind Map</Text>
+                            <WindMapCard latitude={latitude} longitude={longitude}/>
+                        </View>
+                    </View>
+                </TouchableOpacity>
+                <View className="mt-5 px-4">
                     <View
                         className="bg-black/40 rounded-3xl p-5"
                     >
