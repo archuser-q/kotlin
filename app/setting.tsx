@@ -1,3 +1,4 @@
+import { useUnitStore } from '@/store/unitStore';
 import { useRouter } from 'expo-router';
 import { ArrowLeft, Check, ChevronsUpDown } from 'lucide-react-native';
 import { useState } from 'react';
@@ -16,8 +17,8 @@ interface DropdownProps<T> {
 
 export default function Setting() {
   const router = useRouter();
-  const [tempUnit, setTempUnit] = useState<TempUnit>('°C');
-  const [windUnit, setWindUnit] = useState<WindUnit>('km/h');
+  const {tempUnit, windUnit, setTempUnit, setWindUnit} = useUnitStore();
+
   const [showTempDropdown, setShowTempDropdown] = useState<boolean>(false);
   const [showWindDropdown, setShowWindDropdown] = useState<boolean>(false);
 
@@ -68,7 +69,9 @@ export default function Setting() {
   return (
     <ScrollView className='bg-white/60'>
       <View className='pt-14 gap-8 pl-8'>
-        <TouchableOpacity>
+        <TouchableOpacity
+            onPress={() => router.back()}
+        >
             <ArrowLeft size={32} />
         </TouchableOpacity>
         <Text className='text-4xl h-12'>Settings</Text>

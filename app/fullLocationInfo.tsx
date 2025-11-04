@@ -1,3 +1,4 @@
+import AIWeatherAdvice from "@/component/AIWeatherAdvice";
 import CircularProgressBar from "@/component/CircularProgressBar";
 import DashCircularProgressBar from "@/component/DashCircularProgressBar";
 import Modal from "@/component/Modal";
@@ -5,6 +6,8 @@ import RGBCircularProgressBar from "@/component/RGBCIrcularProgressBar";
 import { Wave } from "@/component/wave";
 import { useData } from "@/data/serverData";
 import { useCardStore } from "@/store/cityCardStore";
+import { useUnitStore } from "@/store/unitStore";
+import { temperatureConverted, windSpeedConverted } from "@/utils/getUnitConverted";
 import getUVLevel from "@/utils/getUVLevel";
 import getWeatherDescription from "@/utils/getWeatherDescription";
 import getWeatherGif from "@/utils/getWeatherGif";
@@ -18,6 +21,7 @@ import WindMapCard from "../component/windMap";
 
 export default function fullLocationInfo(){
     const { cityName, latitude, longitude, weather, airQuality } = useData();
+    const { tempUnit, windUnit } = useUnitStore();
 
     const [isCardExist, setIsCardExist] = useState(false);
     const [existingCardIndex, setExistingCardIndex] = useState(-1);
@@ -156,18 +160,18 @@ export default function fullLocationInfo(){
                 </View>
                 <View className="pt-20 pl-7 gap-5 pb-96">
                     <Text className="text-xl text-white">{cityName}</Text>
-                    <Text className="text-9xl text-white">{Math.round(weather.current.temperature_2m)}°</Text>
-                    <Text className="text-xl text-white">{getWeatherDescription(weather.current.weathercode)} {Math.round(weather.daily.temperature_2m_max[0])}°/{Math.round(weather.daily.temperature_2m_min[0])}°</Text>
+                    <Text className="text-9xl text-white">{temperatureConverted(weather.current.temperature_2m, tempUnit)}°</Text>
+                    <Text className="text-xl text-white">{getWeatherDescription(weather.current.weathercode)} {temperatureConverted(weather.daily.temperature_2m_max[0], tempUnit)}°/{temperatureConverted(weather.daily.temperature_2m_min[0],tempUnit)}°</Text>
                 </View>
                 <View className="mt-8 px-4">
                     <View
                         className="bg-black/40 rounded-3xl p-5"
                     >
-                        {/*<AIWeatherAdvice 
+                        <AIWeatherAdvice 
                             weather={weather}
                             airQuality={airQuality}
                             cityName={cityName}
-                        />*/}
+                        />
                         <View className="h-[1px] bg-gray-300 mb-5">
                         </View>
                         <ScrollView
@@ -182,7 +186,7 @@ export default function fullLocationInfo(){
                                 >
                                     <Text className="font-2xl text-white">{item.time}</Text>
                                     <WeatherIcon weathercode={item.weathercode}/>
-                                    <Text className="font-2xl text-center text-white">{item.temp}°</Text>
+                                    <Text className="font-2xl text-center text-white">{temperatureConverted(item.temp, tempUnit)}°</Text>
                                 </View>
                             ))}
                         </ScrollView>
@@ -218,9 +222,9 @@ export default function fullLocationInfo(){
                                 >
                                     <Text className="font-2xl text-white w-12">{item.time}</Text>
                                     <View>
-                                        <WeatherIcon weathercode={item.weathercode}/>
+                                        <WeatherIcon weathercode={temperatureConverted(item.weathercode, tempUnit)}/>
                                     </View>
-                                    <Text className="font-2xl text-center text-white">{item.max}° / {item.min}°</Text>
+                                    <Text className="font-2xl text-center text-white">{temperatureConverted(item.max,tempUnit)}° / {temperatureConverted(item.min,tempUnit)}°</Text>
                                 </View>
                             ))}
                         </ScrollView>
@@ -265,8 +269,8 @@ export default function fullLocationInfo(){
                                 <Text className="text-white font-normal">Direction:</Text>
                             </View>
                             <View className="flex-1 gap-3">
-                                <Text className="text-white font-normal">{weather.current.wind_speed_10m} km/h</Text>
-                                <Text className="text-white font-normal">{weather.current.wind_gusts_10m} km/h</Text>
+                                <Text className="text-white font-normal">{windSpeedConverted(weather.current.wind_speed_10m, windUnit)} {windUnit}</Text>
+                                <Text className="text-white font-normal">{windSpeedConverted(weather.current.wind_gusts_10m, windUnit)} {windUnit}</Text>
                                 <Text className="text-white font-normal">{weather.current.wind_direction_10m}° {getWindDirection(weather.current.wind_direction_10m)}</Text>
                             </View>
                             <View>
