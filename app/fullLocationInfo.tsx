@@ -1,4 +1,5 @@
 import AirQualityGradientBar from "@/component/AirQualityGradientBar";
+import AIWeatherAdvice from "@/component/AIWeatherAdvice";
 import CircularProgressBar from "@/component/CircularProgressBar";
 import DashCircularProgressBar from "@/component/DashCircularProgressBar";
 import getAirQualityAdvice from "@/component/getAirQualityAdvice";
@@ -169,6 +170,11 @@ export default function fullLocationInfo(){
                     <View
                         className="bg-black/40 rounded-3xl p-5"
                     >
+                        <AIWeatherAdvice
+                                weather={weather}
+                                airQuality={airQuality}
+                                cityName={cityName}
+                        />
                         <View className="h-[1px] bg-gray-300 mb-5">
                         </View>
                         <ScrollView
