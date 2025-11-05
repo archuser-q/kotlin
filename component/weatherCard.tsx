@@ -25,6 +25,7 @@ export function WeatherCard({ cityName, latitude, longitude }: WeatherCardProps)
   const gifSource = getWeatherGif({
     isDay: weather.current.is_day,
     weathercode: weather.current.weathercode,
+    weather: weather
   });
 
   return (

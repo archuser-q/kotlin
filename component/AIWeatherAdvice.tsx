@@ -1,13 +1,8 @@
 import { getWeatherAdvice } from '@/services/weatherAdvisor';
+import { AIWeatherAdviceProps } from '@/type/AIWeatherAdviceProps';
 import { RefreshCw } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
-
-interface AIWeatherAdviceProps {
-  weather: any;
-  airQuality: any;
-  cityName: string;
-}
 
 export default function AIWeatherAdvice({ 
   weather, 

@@ -1,10 +1,9 @@
+import { ToolTipProps } from "@/type/ToolTipProps";
 import { Group, RoundedRect, Text as SkiaText } from "@shopify/react-native-skia";
-import { SharedValue, useDerivedValue } from "react-native-reanimated";
+import { useDerivedValue } from "react-native-reanimated";
 
 export default function ToolTip(
-  { x, y, value, font, chartWidth, chartHeight, label }: 
-  { x: SharedValue<number>; y: SharedValue<number>, value: SharedValue<number>, 
-    font:any, chartWidth: number, chartHeight: number, label: SharedValue<string>}) {
+  { x, y, value, font, chartWidth, chartHeight, label }: ToolTipProps) {
   const boxWidth = 80;
   const boxHeight = 40;
   const padding = 8;

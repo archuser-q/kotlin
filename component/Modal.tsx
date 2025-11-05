@@ -1,24 +1,15 @@
+import { ModalProps } from '@/type/ModalProps';
+import formatLabelTime from '@/utils/formatTimeLabel';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import React, { useMemo, useRef } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import GeneralLineChart from './GeneralLineChart';
 
-interface UVModalProps {
-  visible: boolean;
-  title: string;
-  type: string;
-  weather: any;
-  airQuality: any;
-  onClose: () => void;
-}
-
-export default function Modal({ visible, title, type, weather, airQuality, onClose }: UVModalProps) {
+export default function Modal({ visible, title, type, weather, airQuality, onClose }: ModalProps) {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ['90%', '95%'], []);
 
   const getChartConfig = () => {
-    if (!weather) return null;
-    
     switch(type) {
       case 'uv':
         return {
@@ -139,14 +130,4 @@ export default function Modal({ visible, title, type, weather, airQuality, onClo
       </BottomSheetView>
     </BottomSheet>
   );
-}
-
-function formatLabelTime(isoString: string): string {
-  const date = new Date(isoString);
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-
-  return `${hours}:${minutes}`;
 }

@@ -14,7 +14,6 @@ export default function getWeatherGif({ isDay, weathercode, weather }: WeatherGi
   const currentHour = new Date().getHours();
 
   if (weather?.daily) {
-    const now = new Date();
     const isNearSunrise = Math.abs(currentHour - new Date(weather.daily.sunrise[0])) < 30 * 60 * 1000;
     const isNearSunset = Math.abs(currentHour - new Date(weather.daily.sunset[0])) < 30 * 60 * 1000;
     const isRaining = weather.daily.showers_sum && weather.daily.showers_sum[0] > 0;
