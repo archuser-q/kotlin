@@ -1,5 +1,8 @@
+import AirQualityGradientBar from "@/component/AirQualityGradientBar";
 import CircularProgressBar from "@/component/CircularProgressBar";
 import DashCircularProgressBar from "@/component/DashCircularProgressBar";
+import getAirQualityAdvice from "@/component/getAirQualityAdvice";
+import getAirQualityLevel from "@/component/getAirQualityLevel";
 import Modal from "@/component/Modal";
 import RGBCircularProgressBar from "@/component/RGBCIrcularProgressBar";
 import { Wave } from "@/component/wave";
@@ -225,6 +228,18 @@ export default function fullLocationInfo(){
                     </View>
                 </View>
                 <View className="flex-row flex-wrap justify-between px-2 pt-5 pb-10">
+                    <View className="w-full h-50 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5">
+                        <View className="pb-20 flex-1">
+                            <Text className="text-white text-xl">Air quality</Text>
+                            <Text className="text-2xl font-medium text-white mb-3">
+                                {getAirQualityLevel(airQuality.hourly.european_aqi[0])}
+                            </Text>
+                            <Text className="text-white">
+                                {getAirQualityAdvice(airQuality.hourly.european_aqi[0]).advice}
+                            </Text>
+                            <AirQualityGradientBar value={airQuality.hourly.european_aqi[0]} />
+                        </View>
+                    </View>
                     <TouchableOpacity 
                         className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5"
                         onPress={() => openModal('UV Index', 'uv')}
@@ -326,15 +341,6 @@ export default function fullLocationInfo(){
                             </View>
                         </View>
                     </View>
-                    <TouchableOpacity 
-                        className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5"
-                        onPress={() => openModal('Air Quality', 'airquality')}
-                    >
-                        <View className="pb-20">
-                            <Text className="text-white">Air quality</Text>
-                            <Text className="text-2xl font-medium text-white">{airQuality.hourly.european_aqi[0]}</Text>
-                        </View>
-                    </TouchableOpacity>
                     <TouchableOpacity 
                         className="w-[49%] h-44 bg-black/40 rounded-2xl mb-5 pt-5 pl-5 flex-row justify-between items-center pr-5"
                         onPress={() => openModal('Pressure', 'pressure')}

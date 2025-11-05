@@ -1,9 +1,10 @@
 import { ModalProps } from '@/type/ModalProps';
 import formatLabelTime from '@/utils/formatTimeLabel';
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import React, { useMemo, useRef } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import GeneralLineChart from './GeneralLineChart';
+import { INFO_CARDS } from './InfoCard';
 
 export default function Modal({ visible, title, type, weather, airQuality, onClose }: ModalProps) {
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -70,18 +71,6 @@ export default function Modal({ visible, title, type, weather, airQuality, onClo
           yKey: 'value',
           color: '#6b7280'
         };
-
-        case 'airquality':
-            return{
-                data: airQuality.hourly.time.slice(0,24).map((time: string, i: number)=>({
-                    hour: new Date(time).getHours(),
-                    value: airQuality.hourly.european_aqi[i],
-                    label: formatLabelTime(time)
-                })),
-                xKey: 'hour',
-                yKey: 'value',
-                color: '#6b7280'
-            }
       
       default:
         return null;
@@ -107,27 +96,56 @@ export default function Modal({ visible, title, type, weather, airQuality, onClo
       onClose={onClose}
       backgroundStyle={{ backgroundColor: '#fff' }}
     >
-      <BottomSheetView className="flex-1 p-6">
-        <View className="flex-row justify-between items-center mb-4">
-          <Text className="text-xl font-semibold">{title}</Text>
-          <TouchableOpacity onPress={onClose}>
-            <Text>Cancel</Text>
-          </TouchableOpacity>
-        </View>
-        
-        <View className="flex-1">
+      <BottomSheetScrollView className="flex-1">
+        <View className="p-6">
+          <View className="flex-row justify-between items-center mb-4">
+            <Text className="text-xl font-semibold">{title}</Text>
+            <TouchableOpacity onPress={onClose}>
+              <Text>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View className="h-64 mb-6">
             {chartConfig ? (
-                <GeneralLineChart
+              <GeneralLineChart
                 data={chartConfig.data}
                 xKey={chartConfig.xKey}
                 yKey={chartConfig.yKey}
                 lineColor={chartConfig.color}
-                />
+              />
             ) : (
-                <Text>Loading...</Text>
+              <Text>Loading...</Text>
             )}
+          </View>
+
+          {type && INFO_CARDS[type] && (
+            <View className="bg-gray-50 rounded-lg p-4 mt-20">
+              <Text className="text-lg font-semibold mb-2">
+                {INFO_CARDS[type].title}
+              </Text>
+              <Text className="text-gray-700 mb-4">
+                {INFO_CARDS[type].description}
+              </Text>
+              
+              {INFO_CARDS[type].ranges && (
+                <View>
+                  <Text className="font-semibold mb-2">Thang đo:</Text>
+                  {INFO_CARDS[type].ranges!.map((range, index) => (
+                    <View key={index} className="flex-row items-center mb-2">
+                      <View 
+                        className="w-4 h-4 rounded mr-3" 
+                        style={{ backgroundColor: range.color }}
+                      />
+                      <Text className="flex-1">{range.label}</Text>
+                      <Text className="text-gray-600">{range.range}</Text>
+                    </View>
+                  ))}
+                </View>
+              )}
+            </View>
+          )}
         </View>
-      </BottomSheetView>
+      </BottomSheetScrollView>
     </BottomSheet>
   );
 }

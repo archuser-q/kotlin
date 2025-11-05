@@ -1,17 +1,10 @@
+import { GeneralLineChartProps } from "@/type/GeneralLineChartProps";
 import { useFont } from "@shopify/react-native-skia";
 import { Dimensions, View } from "react-native";
 import { useDerivedValue } from "react-native-reanimated";
 import { CartesianChart, Line, useChartPressState } from "victory-native";
 import roboto from '../assets/fonts/Roboto-Regular.ttf';
 import ToolTip from "./lineComponent/customToolTip";
-
-interface GeneralLineChartProps {
-  data: any[];
-  xKey: string;
-  yKey: string;
-  lineColor?: string;
-  height?: number;
-}
 
 export default function GeneralLineChart({ 
   data, 
