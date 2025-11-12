@@ -37,7 +37,11 @@ export default function GeneralLineChart({
         data={data} 
         xKey={xKey} 
         yKeys={[yKey]}
-        axisOptions={{ font }}
+        axisOptions={{ 
+          font,
+          lineColor: '#ffffff',
+          labelColor: '#ffffff' 
+        }}
         chartPressState={state}
       >
         {({ points }) => {

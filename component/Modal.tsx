@@ -94,14 +94,14 @@ export default function Modal({ visible, title, type, weather, airQuality, onClo
       snapPoints={snapPoints}
       enablePanDownToClose
       onClose={onClose}
-      backgroundStyle={{ backgroundColor: '#fff' }}
+      backgroundStyle={{ backgroundColor: '#1a1a1a' }}
     >
       <BottomSheetScrollView className="flex-1">
         <View className="p-6">
           <View className="flex-row justify-between items-center mb-4">
-            <Text className="text-xl font-semibold">{title}</Text>
+            <Text className="text-xl font-semibold text-white">{title}</Text>
             <TouchableOpacity onPress={onClose}>
-              <Text>Cancel</Text>
+              <Text className='text-white'>Cancel</Text>
             </TouchableOpacity>
           </View>
 
@@ -119,25 +119,25 @@ export default function Modal({ visible, title, type, weather, airQuality, onClo
           </View>
 
           {type && INFO_CARDS[type] && (
-            <View className="bg-gray-50 rounded-lg p-4 mt-20">
-              <Text className="text-lg font-semibold mb-2">
+            <View className="bg-black rounded-lg p-4 mt-20">
+              <Text className="text-lg font-semibold mb-2 text-white">
                 {INFO_CARDS[type].title}
               </Text>
-              <Text className="text-gray-700 mb-4">
+              <Text className="text-white mb-4">
                 {INFO_CARDS[type].description}
               </Text>
               
               {INFO_CARDS[type].ranges && (
                 <View>
-                  <Text className="font-semibold mb-2">Thang đo:</Text>
+                  <Text className="font-semibold mb-2 text-white">Index level:</Text>
                   {INFO_CARDS[type].ranges!.map((range, index) => (
                     <View key={index} className="flex-row items-center mb-2">
                       <View 
                         className="w-4 h-4 rounded mr-3" 
                         style={{ backgroundColor: range.color }}
                       />
-                      <Text className="flex-1">{range.label}</Text>
-                      <Text className="text-gray-600">{range.range}</Text>
+                      <Text className="flex-1 text-white">{range.label}</Text>
+                      <Text className="text-white">{range.range}</Text>
                     </View>
                   ))}
                 </View>
