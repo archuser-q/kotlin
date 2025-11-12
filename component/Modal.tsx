@@ -5,10 +5,30 @@ import React, { useMemo, useRef } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import GeneralLineChart from './GeneralLineChart';
 import { INFO_CARDS } from './InfoCard';
+import { getCloudCoverAdvice, getHumidityAdvice, getPressureAdvice, getRealFeelAdvice, getUVAdvice } from './getComprehensiveAdvice';
 
 export default function Modal({ visible, title, type, weather, airQuality, onClose }: ModalProps) {
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ['90%', '95%'], []);
+  const currentAdvice = useMemo(() => {
+    switch(type) {
+      case 'uv':
+        return getUVAdvice(weather.current.uv_index);
+      case 'humidity':
+        return getHumidityAdvice(weather.current.relative_humidity_2m);
+      case 'realfeel':
+        return getRealFeelAdvice(
+          weather.hourly.apparent_temperature[0], 
+          weather.current.temperature_2m
+        );
+      case 'pressure':
+        return getPressureAdvice(weather.current.pressure_msl);
+      case 'cloud':
+        return getCloudCoverAdvice(weather.current.cloud_cover);
+      default:
+        return null;
+    }
+  }, [type, weather]);
 
   const getChartConfig = () => {
     switch(type) {
@@ -119,30 +139,48 @@ export default function Modal({ visible, title, type, weather, airQuality, onClo
           </View>
 
           {type && INFO_CARDS[type] && (
-            <View className="bg-black rounded-lg p-4 mt-20">
-              <Text className="text-lg font-semibold mb-2 text-white">
-                {INFO_CARDS[type].title}
-              </Text>
-              <Text className="text-white mb-4">
-                {INFO_CARDS[type].description}
-              </Text>
-              
-              {INFO_CARDS[type].ranges && (
-                <View>
-                  <Text className="font-semibold mb-2 text-white">Index level:</Text>
-                  {INFO_CARDS[type].ranges!.map((range, index) => (
-                    <View key={index} className="flex-row items-center mb-2">
-                      <View 
-                        className="w-4 h-4 rounded mr-3" 
-                        style={{ backgroundColor: range.color }}
-                      />
-                      <Text className="flex-1 text-white">{range.label}</Text>
-                      <Text className="text-white">{range.range}</Text>
-                    </View>
-                  ))}
+            <>
+              {currentAdvice && (
+                <View 
+                  className="rounded-lg mt-20 p-4 mb-4" 
+                  style={{ backgroundColor: currentAdvice.color + '20' }}
+                >
+                  <View className="flex-row items-center mb-2">
+                    <Text className="text-2xl mr-2">{currentAdvice.icon}</Text>
+                    <Text className="text-lg font-semibold text-white">
+                      Current Status: {currentAdvice.level}
+                    </Text>
+                  </View>
+                  <Text className="text-white">
+                    {currentAdvice.advice}
+                  </Text>
                 </View>
               )}
-            </View>
+              <View className="bg-black rounded-lg p-4 mt-4">
+                <Text className="text-lg font-semibold mb-2 text-white">
+                  {INFO_CARDS[type].title}
+                </Text>
+                <Text className="text-white mb-4">
+                  {INFO_CARDS[type].description}
+                </Text>
+                
+                {INFO_CARDS[type].ranges && (
+                  <View>
+                    <Text className="font-semibold mb-2 text-white">Index level:</Text>
+                    {INFO_CARDS[type].ranges!.map((range, index) => (
+                      <View key={index} className="flex-row items-center mb-2">
+                        <View 
+                          className="w-4 h-4 rounded mr-3" 
+                          style={{ backgroundColor: range.color }}
+                        />
+                        <Text className="flex-1 text-white">{range.label}</Text>
+                        <Text className="text-white">{range.range}</Text>
+                      </View>
+                    ))}
+                  </View>
+                )}
+              </View>
+            </>
           )}
         </View>
       </BottomSheetScrollView>

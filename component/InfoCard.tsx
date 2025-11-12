@@ -23,7 +23,7 @@ export const INFO_CARDS: Record<string, InfoCard> = {
   },
   realfeel: {
     title: 'What is Real Feel Temperature?',
-    description: 'RealFeel (Apparent Temperature) is the temperature perceived by the human body, taking into account wind and humidity.'
+    description: 'Real Feel (Apparent Temperature) is the temperature perceived by the human body, taking into account wind and humidity.'
   },
   pressure: {
     title: 'What is Atmospheric Pressure?',
